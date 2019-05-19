@@ -4,7 +4,16 @@ import pandas as pd
 from collections import Counter, defaultdict
 from math import log
 
-#funkcja tworząca z tekstu ngramy
+import dash
+import dash_core_components as dcc
+import dash_html_components as html
+import plotly.plotly as py
+import plotly.graph_objs as go
+from dash.dependencies import Input, Output
+
+app = dash.Dash()
+
+# funkcja tworząca z tekstu ngramy
 def zip_ngrams(text, n=3, exact=True):
     return ["".join(j).upper() for j in zip(*[text[i:] for i in range(n)])]
 
@@ -56,25 +65,70 @@ sum_german = 0
 #Szukamy po ngramach z tekstu podanego przez użytkownika tych, które występują z naszego zbioru danych. Następnie sprawdzamy ile ich jest i wyliczamy procent z wszystkich ngramów.
 # Na koniec wyliczamy z wzoru log(%ngramów) w wartości bezwględnej i dodajemy do sumy.
 # WZÓR Z INTERNETU (ma jakiś sens), MOZE UDA SIE LEPSZY ZNALEZC? Występuje problem gdy mała ilość tekstu podanego przez użytkownika
-for search in keys:
-    for key in counts_english:
-        if search == key[0]:
-            print("English:" + key[0] + " with freq: " + str(key[1]))
-            perc = key[1]/english_length
-            sum_english += abs(log(perc))
+# for search in keys:
+#     for key in counts_english:
+#         if search == key[0]:
+#             print("English:" + key[0] + " with freq: " + str(key[1]))
+#             perc = key[1]/english_length
+#             sum_english += abs(log(perc))
+#
+# for search in keys:
+#     for key in counts_german:
+#         if search == key[0]:
+#             print("German:" + key[0] + " with freq: " + str(key[1]))
+#             perc = key[1]/german_length
+#             sum_german += abs(log(perc))
 
-for search in keys:
-    for key in counts_german:
-        if search == key[0]:
-            print("German:" + key[0] + " with freq: " + str(key[1]))
-            perc = key[1]/german_length
-            sum_german += abs(log(perc))
 
-print(sum_english)
-print(sum_german)
+app.layout = html.Div(children=[
+dcc.Dropdown(
+    id='dd-language',
+    options=[
+        {'label': 'English', 'value': 'EN'},
+        {'label': 'German', 'value': 'DE'}
+    ],
+    value='Language'
+),
+    dcc.Graph(id='example',
+                figure={'data': [
+                go.Bar(x=[ngram[0] for ngram in counts_english], y=[ngram[1] for ngram in counts_english])
+                ],
+                'layout': go.Layout(title='Language')
+                })
+])
 
-# Testowe, nie sugerować się za bardzo!
-if sum_english != 0 and sum_english > sum_german:
-    print("It's probably English!")
-else:
-    print("It's probably German!")
+@app.callback(
+    Output(component_id='example', component_property='figure'),
+    [Input(component_id='dd-language', component_property='value')]
+)
+def update_plot(input_value):
+    if input_value == "EN":
+            fig = {'data': [
+            go.Bar(x=[ngram[0] for ngram in counts_english], y=[ngram[1] for ngram in counts_english])
+            ],
+            'layout': go.Layout(title='English')
+            }
+            return fig
+    else:
+        fig = {'data': [
+        go.Bar(x=[ngram[0] for ngram in counts_german], y=[ngram[1] for ngram in counts_german])
+        ],
+        'layout': go.Layout(title='German')
+        }
+        return fig
+
+# def update_output_div(input_value):
+#     if input_value == 'EN':
+
+
+if __name__ == '__main__':
+    app.run_server()
+
+# print(sum_english)
+# print(sum_german)
+#
+# # Testowe, nie sugerować się za bardzo!
+# if sum_english != 0 and sum_english > sum_german:
+#     print("It's probably English!")
+# else:
+#     print("It's probably German!")
