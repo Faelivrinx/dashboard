@@ -46,6 +46,11 @@ app.layout = html.Div(children=[
                 )]),
                 html.Div(id="tab-trigrams", className="col s12", children=[html.Div(
                     # trigrams layout
+                    html.Div(className="row",children=[
+                        html.Div(className="col s12", children=[html.Div(className="card-panel", children=[
+                            ui.createTrigramBarGraph(data.getTrigramData(languageMap))
+                            ])])
+                    ])
                 )])
             ])
         ], id='data-presentation-section', className="hide"),

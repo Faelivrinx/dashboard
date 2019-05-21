@@ -32,13 +32,13 @@ def createDataPresentationTabMenu():
     return html.Div(className="col s12", children=[
                 html.Ul(className="tabs card", children=[
                     html.Li(className="tab col s4", children=[
-                        html.A("Monogramy", href="#tab-monograms")
+                        html.A("Monogramy", href="#tab-monograms", className="waves-effect waves-dark")
                     ]),
                     html.Li(className="tab col s4", children=[
-                        html.A("Digramy", href="#tab-digrams")
+                        html.A("Digramy", href="#tab-digrams", className="waves-effect waves-dark")
                     ]),
                     html.Li(className="tab col s4", children=[
-                        html.A("Trigramy", href="#tab-trigrams")
+                        html.A("Trigramy", href="#tab-trigrams", className="waves-effect waves-dark")
                     ])
                 ])
             ])
@@ -46,7 +46,8 @@ def createDataPresentationTabMenu():
 def createMonogramBarGraph(languageMap):
     return dcc.Graph(id = "monogram-bar-graph", figure=go.Figure(
         data = createGoBar(languageMap),
-        layout = go.Layout(title="Monogramy w różnych językach")
+        layout = go.Layout(title="Monogramy w różnych językach"),
+
     ))
 
 def createBigramBarGraph(languageMap):
@@ -54,6 +55,15 @@ def createBigramBarGraph(languageMap):
         data = createGoBar(languageMap),
         layout = go.Layout(title="Bigramy w różnych językach")
     ))
+
+def createTrigramBarGraph(languageMap):
+    return dcc.Graph(
+        id = "trigram-bar-graph",
+        figure=go.Figure(
+            data = createGoBar(languageMap),
+            layout = go.Layout(title="Trigramy w różnych językach")
+        )
+    )
 
 def createGoBar(languageMap):
     bars = []

@@ -1,17 +1,21 @@
 const app = (() => {
     return {
         init: () => {
+            // fix Chart size hacker style = 500
+            window.dispatchEvent(new Event('resize'));
+
             const element = {
                 presentationSection: document.querySelector("#data-presentation-section"),
                 presentationSectionLink: document.querySelector("#data-presentation"),
                 analysisSection: document.querySelector("#data-analysis-section"),
                 analysisSectionLink: document.querySelector("#data-analysis"),
-                tabs: document.querySelector(".tabs")
+                tabs: document.querySelector(".tabs"),
             }
             // initialize tabs
-            const tabsInstance = M.Tabs.init(element.tabs, {swipeable: false});
+            const tabsInstance = M.Tabs.init(element.tabs, {swipeable: false, onShow: ()=>{window.dispatchEvent(new Event('resize'));}});
             tabsInstance.select('tab-monograms');
             tabsInstance.updateTabIndicator();
+
 
             const showAnalysisSection = () => {
                 element.analysisSection.classList.remove("hide")

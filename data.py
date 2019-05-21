@@ -46,6 +46,9 @@ def getMonogramData(languageMap):
 def getBigramData(languageMap):
     return [language for language in languageMap if language["ngramType"] == "bigrams"]
 
+def getTrigramData(languageMap):
+    return [language for language in languageMap if language["ngramType"] == "trigrams"]
+
 # create language names for select
 def createLanguageKeysSet(languageMap):
     return set([language["language"] for language in languageMap])
