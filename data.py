@@ -28,7 +28,24 @@ def loadInitialData():
         result = {
             "language": filename[:filename.find("_")],
             "ngramType": ngramType,
-            "data": getNgramCounter(data)
+            "data": getNgramCounter(data),
+            "totalDataCount": sumNgrams(getNgramCounter(data))
         }
         languageMap.append(result)
     return languageMap
+
+def sumNgrams(data):
+    sum = 0
+    for item in data:
+        sum += int(item[1])
+    return sum
+
+def getMonogramData(languageMap):
+    return [language for language in languageMap if language["ngramType"] == "monograms"]
+
+def getBigramData(languageMap):
+    return [language for language in languageMap if language["ngramType"] == "bigrams"]
+
+# create language names for select
+def createLanguageKeysSet(languageMap):
+    return set([language["language"] for language in languageMap])
