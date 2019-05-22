@@ -60,6 +60,25 @@ def sortData(result):
     result["data"].sort(key=lambda x: int(x[1]), reverse=True)
     return result
 
+def saveInputToFile(data):
+    monograms = getNgramFlatMap('monograms', data)
+    digrams = getNgramFlatMap('bigrams', data)
+    trigrams = getNgramFlatMap('trigrams', data)
+    counter_monograms = Counter(monograms)
+    counter_digrams = Counter(digrams)
+    counter_trigrams = Counter(trigrams)
+    letters = {str(count).upper(): str(counter_monograms[count]) for count in counter_monograms}
+    digrams = {str(count).upper(): str(counter_digrams[count]) for count in counter_digrams}
+    trigrams = {str(count).upper(): str(counter_trigrams[count]) for count in counter_trigrams}
+
+    result = {
+    'letters': letters,
+    'digrams': digrams,
+    'trigrams': trigrams
+    }
+    with open('./data/input.json', 'wb') as f:
+        json.dump(result, codecs.getwriter('utf-8')(f), ensure_ascii=False)
+
 # load files to array from data folder
 def loadInitialData():
     directory = "./data"
