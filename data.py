@@ -51,7 +51,7 @@ def getTrigramsFromJson(filename, json_data):
     trigrams = getJsonTrigrams(json_data)
     return {
         "language": filename[:filename.find(".")],
-        "ngramType": 'bigrams',
+        "ngramType": 'trigrams',
         "data": trigrams,
         "totalDataCount": sumNgrams(trigrams)
     }
