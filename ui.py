@@ -46,14 +46,14 @@ def createDataPresentationTabMenu():
 def createMonogramBarGraph(languageMap):
     return dcc.Graph(id = "monogram-bar-graph", figure=go.Figure(
         data = createGoBar(languageMap),
-        layout = go.Layout(title="Monogramy w różnych językach"),
+        layout = go.Layout(title="Monogramy w różnych językach", barmode="stack"),
 
     ))
 
 def createBigramBarGraph(languageMap):
     return dcc.Graph(id = "bigram-bar-graph", figure=go.Figure(
         data = createGoBar(languageMap),
-        layout = go.Layout(title="Bigramy w różnych językach")
+        layout = go.Layout(title="Bigramy w różnych językach", barmode="stack")
     ))
 
 def createTrigramBarGraph(languageMap):
@@ -61,7 +61,7 @@ def createTrigramBarGraph(languageMap):
         id = "trigram-bar-graph",
         figure=go.Figure(
             data = createGoBar(languageMap),
-            layout = go.Layout(title="Trigramy w różnych językach")
+            layout = go.Layout(title="Trigramy w różnych językach", barmode="stack")
         )
     )
 
@@ -76,11 +76,3 @@ def createGoBar(languageMap):
         y = [int(item[1])/language['totalDataCount']*100 for item in data]  
         bars.append(go.Bar(x=x, y=y, name=title))
     return bars 
-        # return dcc.Graph(figure={
-    #     'data': [
-    #         {"x":["a", "b"], "y":[234234,5623], "name":"Polski"},
-    #         {"x":["a", "b"], "y":[321451,4244], "name":"Angielski"}
-    #     ],
-    #     'layout': {"title":"Monogramy w różnych językach"},
-    # }, )
-

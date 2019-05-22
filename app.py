@@ -19,6 +19,7 @@ app.layout = html.Div(children=[
     ui.createNavbar(),
     html.Section(children=[
         html.Div(children=[
+            # Data presentation
             ui.createSectionHeader("Prezentacja danych"),
             html.Div(className="row", children=[
                 ui.createDataPresentationTabMenu(),
@@ -54,9 +55,71 @@ app.layout = html.Div(children=[
                 )])
             ])
         ], id='data-presentation-section', className="hide"),
-        html.Div(children=["sekcja analizy"], id='data-analysis-section', className="hide"),
+        html.Div(children=[
+            # Data analysis
+            ui.createSectionHeader("Analiza danych"),
+            html.Ul(className="collapsible",children=[
+                html.Li(className="active", children=[
+                    html.Div(className="collapsible-header", children=[
+                        html.I(className="material-icons", children=["short_text"]), 
+                        "Wczytaj z pola tekstowego"
+                    ]),
+                    html.Div(className="collapsible-body grey lighten-5", children=[
+                        html.Div(className="input-field mb-4", children=[
+                        dcc.Textarea(
+                            maxLength="2000",
+                            className="materialize-textarea",
+                            id='analyse-text-input'
+                        ),
+                        html.Label(htmlFor="input-text",children=["Wklej tekst do analizy"]),
+                    ]),
+                    html.Button(className="btn blue darken-2 waves-effect waves-light", children=['Analizuj tekst'], id='analyse-text-btn')
+                    ])
+                ]),
+                html.Li(children=[
+                    html.Div(className="collapsible-header", children=[
+                        html.I(className="material-icons", children=["insert_drive_file"]), 
+                        "Wczytaj z pliku"
+                    ]),
+                    html.Div(className="collapsible-body grey lighten-5", children=[
+                        dcc.Upload(
+                            className="mb-4",
+                            id='analyse-file-upload-input',
+                            children=html.Div([
+                                'Przeciągnij plik lub ',
+                                html.A('wybierz')
+                            ]),
+                            style={
+                                'width': '100%',
+                                'height': '60px',
+                                'lineHeight': '60px',
+                                'borderWidth': '1px',
+                                'borderStyle': 'dashed',
+                                'borderRadius': '5px',
+                                'textAlign': 'center',
+                                'margin': '10px'
+                            },
+                            multiple=False
+                        ),
+                        html.Button(className="btn blue darken-2 waves-effect waves-light", children=['Analizuj plik'], id='analyse-file-btn')
+                    ])
+                ])
+            ]),
+            html.Div(id='output-container-button', children='Enter a value and press submit')
+        ], id='data-analysis-section', className="hide"),
     ],id="main-content", className="container")
-], className="yellow lighten-5", id="main-container")
+], id="main-container")
+
+#callbacks
+@app.callback(
+    dash.dependencies.Output('output-container-button', 'children'),
+    [dash.dependencies.Input('analyse-text-btn', 'n_clicks')],
+    [dash.dependencies.State('analyse-text-input', 'value')])
+def update_output(n_clicks, value):
+    return 'The input value was "{}" and the button has been clicked {} times'.format(
+        value,
+        n_clicks
+    )
 
 # start application
 if __name__ == '__main__':

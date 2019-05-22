@@ -12,6 +12,8 @@ const app = (() => {
                 tabs: document.querySelector(".tabs"),
             }
             // initialize tabs
+            M.AutoInit();
+            
             const tabsInstance = M.Tabs.init(element.tabs, {swipeable: false, onShow: ()=>{window.dispatchEvent(new Event('resize'));}});
             tabsInstance.select('tab-monograms');
             tabsInstance.updateTabIndicator();

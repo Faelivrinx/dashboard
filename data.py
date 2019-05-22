@@ -1,6 +1,7 @@
 import os
 import utility as util
 import codecs
+import json
 
 # get Ngram Flat Map form raw text file like a book or smth  :) all ngrams raw one after another not Count'ed
 def getNgramFlatMap(ngramType, rawData):
@@ -18,20 +19,65 @@ def getNgramCounter(data):
         ngramData.append(line.split())
     return ngramData
 
+#get letters from json file
+def getJsonLetters(json_data):
+    return [[key.upper(), value] for key, value in json_data['letters'].items()]
+
+def getJsonDigrams(json_data):
+    return [[key.upper(), value] for key, value in json_data['digrams'].items()]
+
+def getJsonTrigrams(json_data):
+    return [[key.upper(), value] for key, value in json_data['trigrams'].items()]
+
+def getMonogramsFromJson(filename, json_data):
+    letters = getJsonLetters(json_data)
+    return {
+        "language": filename[:filename.find(".")],
+        "ngramType": 'monograms',
+        "data": letters,
+        "totalDataCount": sumNgrams(letters)
+    }
+
+def getDigramsFromJson(filename, json_data):
+    digrams = getJsonDigrams(json_data)
+    return {
+        "language": filename[:filename.find(".")],
+        "ngramType": 'bigrams',
+        "data": digrams,
+        "totalDataCount": sumNgrams(digrams)
+    }
+
+def getTrigramsFromJson(filename, json_data):
+    trigrams = getJsonTrigrams(json_data)
+    return {
+        "language": filename[:filename.find(".")],
+        "ngramType": 'bigrams',
+        "data": trigrams,
+        "totalDataCount": sumNgrams(trigrams)
+    }
+
 # load files to array from data folder
 def loadInitialData():
     directory = "./data"
     languageMap = []
     for filename in os.listdir(directory):
-        ngramType = filename[(filename.find("_")+1):filename.find(".txt")]
-        data = codecs.open(directory + "/" + filename, 'r', encoding="utf8").read()
-        result = {
-            "language": filename[:filename.find("_")],
-            "ngramType": ngramType,
-            "data": getNgramCounter(data),
-            "totalDataCount": sumNgrams(getNgramCounter(data))
-        }
-        languageMap.append(result)
+        if filename.endswith('.json'):
+            data = codecs.open(directory + "/" + filename, 'r', encoding="utf8").read()
+            json_data = json.loads(data)
+
+            languageMap.append(getMonogramsFromJson(filename, json_data))
+            languageMap.append(getDigramsFromJson(filename, json_data))
+            languageMap.append(getTrigramsFromJson(filename, json_data))
+        else:
+            ngramType = filename[(filename.find("_")+1):filename.find(".txt")]
+            data = codecs.open(directory + "/" + filename, 'r', encoding="utf8").read()
+            result = {
+                "language": filename[:filename.find("_")],
+                "ngramType": ngramType,
+                "data": getNgramCounter(data),
+                "totalDataCount": sumNgrams(getNgramCounter(data))
+            }
+            languageMap.append(result)
     return languageMap
 
 def sumNgrams(data):
