@@ -56,6 +56,10 @@ def getTrigramsFromJson(filename, json_data):
         "totalDataCount": sumNgrams(trigrams)
     }
 
+def sortData(result):
+    result["data"].sort(key=lambda x: int(x[1]), reverse=True)
+    return result
+
 # load files to array from data folder
 def loadInitialData():
     directory = "./data"
@@ -65,9 +69,9 @@ def loadInitialData():
             data = codecs.open(directory + "/" + filename, 'r', encoding="utf8").read()
             json_data = json.loads(data)
 
-            languageMap.append(getMonogramsFromJson(filename, json_data))
-            languageMap.append(getDigramsFromJson(filename, json_data))
-            languageMap.append(getTrigramsFromJson(filename, json_data))
+            languageMap.append(sortData(getMonogramsFromJson(filename, json_data)))
+            languageMap.append(sortData(getDigramsFromJson(filename, json_data)))
+            languageMap.append(sortData(getTrigramsFromJson(filename, json_data)))
         else:
             ngramType = filename[(filename.find("_")+1):filename.find(".txt")]
             data = codecs.open(directory + "/" + filename, 'r', encoding="utf8").read()
@@ -77,7 +81,7 @@ def loadInitialData():
                 "data": getNgramCounter(data),
                 "totalDataCount": sumNgrams(getNgramCounter(data))
             }
-            languageMap.append(result)
+            languageMap.append(sortData(result))
     return languageMap
 
 def sumNgrams(data):

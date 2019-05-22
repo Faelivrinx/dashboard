@@ -71,7 +71,7 @@ def createGoBar(languageMap):
     for language in languageMap:
         title = language['language']
         data = language['data']
-        data = data[:25]
+        data = data[:30]
         x = [item[0] for item in data]
         y = [int(item[1])/language['totalDataCount']*100 for item in data]  
         bars.append(go.Bar(x=x, y=y, name=title))
