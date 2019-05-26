@@ -64,6 +64,30 @@ def createTrigramBarGraph(languageMap):
             layout = go.Layout(title="Trigramy w różnych językach", barmode="stack")
         )
     )
+def createAnalysisBarGraphMonograms():
+    return dcc.Graph(
+        id = "analysis-bar-graph-monograms",
+        figure=go.Figure(
+            data = [],
+            layout = go.Layout(title="Analiza tekstu", barmode="stack")
+        )
+    )
+def createAnalysisLangDropdown(languages):
+    return dcc.Dropdown(
+        id='analysis_lang_dropdown',
+        options=[{'label': lang, 'value': lang }for lang in languages],
+        value='english'
+    )
+def createAnalysisNGramDropdown():
+    return dcc.Dropdown(
+        id='analysis_ngram_dropdown',
+        options=[
+            {'label': 'monograms', 'value': 'monograms'},
+            {'label': 'bigrams', 'value': 'bigrams'},
+            {'label': 'trigrams', 'value': 'trigrams'}
+        ],
+        value='monograms'
+    )
 
 def createGoBar(languageMap):
     bars = []
@@ -73,6 +97,6 @@ def createGoBar(languageMap):
         data = language['data']
         data = data[:30]
         x = [item[0] for item in data]
-        y = [int(item[1])/language['totalDataCount']*100 for item in data]  
+        y = [float(item[1])/language['totalDataCount']*100 for item in data]
         bars.append(go.Bar(x=x, y=y, name=title))
-    return bars 
+    return bars

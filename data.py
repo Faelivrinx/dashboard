@@ -57,7 +57,7 @@ def getTrigramsFromJson(filename, json_data):
     }
 
 def sortData(result):
-    result["data"].sort(key=lambda x: int(x[1]), reverse=True)
+    result["data"].sort(key=lambda x: float(x[1]), reverse=True)
     return result
 
 def saveInputToFile(data):
@@ -121,3 +121,13 @@ def getTrigramData(languageMap):
 # create language names for select
 def createLanguageKeysSet(languageMap):
     return set([language["language"] for language in languageMap])
+
+def findLanguageDataByKeyAndNgram(language, nGramType, languageMap):
+    for langData in languageMap:
+        if langData['language'] == language and langData['ngramType'] == nGramType:
+            return langData
+
+def changeToPercentValue(singleLangMap):
+    for item in singleLangMap['data']:
+        item[1] = float(item[1]) / singleLangMap['totalDataCount'] * 100
+        item[1] = str(item[1])
