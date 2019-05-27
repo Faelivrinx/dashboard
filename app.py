@@ -104,6 +104,7 @@ app.layout = html.Div(children=[
                             multiple=False
                         ),
                         html.Button(className="btn blue darken-2 waves-effect waves-light mb-4", children=['Analizuj plik'], id='analyse-file-btn'),
+                        ui.createShowPredictionLanguageCard("hu"),
                         html.Div(id='analyse-file-upload-container', children=[
                             html.Div(className="row mb-3",children=[
                                 html.Div(className="col s2", children=[
@@ -128,6 +129,8 @@ app.layout = html.Div(children=[
         ], id='data-analysis-section', className="hide"),
     ],id="main-content", className="container")
 ], id="main-container")
+
+
 
 # @app.callback(Output('analysis-bar-graph-monograms', 'figure'),
 #             [Input('analyse-button', 'n_clicks')],

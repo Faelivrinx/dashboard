@@ -10,14 +10,16 @@ const app = (() => {
                 analysisSection: document.querySelector("#data-analysis-section"),
                 analysisSectionLink: document.querySelector("#data-analysis"),
                 tabs: document.querySelector(".tabs"),
+                collapsible: document.querySelector(".collapsible")
             }
             // initialize tabs
             M.AutoInit();
-            
+
+            const collapsibleInstance = M.Collapsible.init(element.collapsible, {onOpenStart: ()=>{window.dispatchEvent(new Event('resize'));}});
             const tabsInstance = M.Tabs.init(element.tabs, {swipeable: false, onShow: ()=>{window.dispatchEvent(new Event('resize'));}});
+            
             tabsInstance.select('tab-monograms');
             tabsInstance.updateTabIndicator();
-
 
             const showAnalysisSection = () => {
                 element.analysisSection.classList.remove("hide")

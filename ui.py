@@ -76,7 +76,8 @@ def crateSelectLanguageDropdown(languages, id):
     return dcc.Dropdown(
         id=id,
         options=[{'label': lang, 'value': lang }for lang in languages],
-        value='english'
+        value='english',
+        clearable=False
     )
 def createSelectNGramDropdown(id):
     return dcc.Dropdown(
@@ -86,7 +87,8 @@ def createSelectNGramDropdown(id):
             {'label': 'bigrams', 'value': 'bigrams'},
             {'label': 'trigrams', 'value': 'trigrams'}
         ],
-        value='monograms'
+        value='monograms',
+        clearable=False
     )
 
 def createGoBar(languageMap):
@@ -100,3 +102,10 @@ def createGoBar(languageMap):
         y = [float(item[1])/language['totalDataCount']*100 for item in data]
         bars.append(go.Bar(x=x, y=y, name=title))
     return bars
+
+def createShowPredictionLanguageCard(languageName):
+    imgPath = "./assets/img/flags/"+languageName+".png"
+    return html.H5(className="blue darken-3 p-2 bold white-text valign-wrapper center-align", children=[
+                ("Wyniki analizy, wprowadzony tekst sugeruje język: "), 
+                html.Img(className="ml-3", src=imgPath, height="42px")
+            ])
