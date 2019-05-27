@@ -107,15 +107,15 @@ app.layout = html.Div(children=[
                         html.Div(id='analyse-file-upload-container', children=[
                             html.Div(className="row mb-3",children=[
                                 html.Div(className="col s2", children=[
-                                    ui.createAnalysisLangDropdown(data.createLanguageKeysSet(languageMap))
+                                    ui.crateSelectLanguageDropdown(data.createLanguageKeysSet(languageMap), "analysis-language-dropdown")
                                 ]),
                                 html.Div(className="col s2", children=[
-                                    ui.createAnalysisNGramDropdown(),
+                                    ui.createSelectNGramDropdown("analysis-ngram-dropdown"),
                                 ])
                             ]),
                             html.Div(className="row",children=[
                                 html.Div(className="col s8", children=[
-                                    ui.createAnalysisBarGraphMonograms()
+                                    ui.createAnalysisBarGraphMonograms("analysis-bar-graph-monograms")
                                 ]),
                                 html.Div(className="col s4", children=[
                                     "stuff here!"

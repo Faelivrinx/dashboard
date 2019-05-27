@@ -64,23 +64,23 @@ def createTrigramBarGraph(languageMap):
             layout = go.Layout(title="Trigramy w różnych językach", barmode="stack")
         )
     )
-def createAnalysisBarGraphMonograms():
+def createAnalysisBarGraphMonograms(id):
     return dcc.Graph(
-        id = "analysis-bar-graph-monograms",
+        id = id,
         figure=go.Figure(
             data = [],
             layout = go.Layout(title="Analiza tekstu", barmode="stack")
         )
     )
-def createAnalysisLangDropdown(languages):
+def crateSelectLanguageDropdown(languages, id):
     return dcc.Dropdown(
-        id='analysis_lang_dropdown',
+        id=id,
         options=[{'label': lang, 'value': lang }for lang in languages],
         value='english'
     )
-def createAnalysisNGramDropdown():
+def createSelectNGramDropdown(id):
     return dcc.Dropdown(
-        id='analysis_ngram_dropdown',
+        id=id,
         options=[
             {'label': 'monograms', 'value': 'monograms'},
             {'label': 'bigrams', 'value': 'bigrams'},
