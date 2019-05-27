@@ -75,8 +75,26 @@ app.layout = html.Div(children=[
                         ),
                         html.Label(htmlFor="input-text",children=["Wklej tekst do analizy"]),
                     ]),
-                    html.Button(className="btn blue darken-2 waves-effect waves-light", children=['Analizuj tekst'], id='analyse-text-btn')
+                    html.Button(className="btn blue darken-2 waves-effect waves-light", children=['Analizuj tekst'], id='analyse-text-btn'),
+                    html.Div(id='analyse-text-upload-container', children=[
+                        html.Div(className="row mb-3",children=[
+                            html.Div(className="col s2", children=[
+                                ui.crateSelectLanguageDropdown(data.createLanguageKeysSet(languageMap), "analysis-language-dropdown-text")
+                            ]),
+                            html.Div(className="col s2", children=[
+                                ui.createSelectNGramDropdown("analysis-ngram-dropdown-text"),
+                            ])
+                        ]),
+                        html.Div(className="row",children=[
+                            html.Div(className="col s8", children=[
+                                ui.createAnalysisBarGraphMonograms("analysis-bar-graph-text")
+                            ]),
+                            html.Div(className="col s4", children=[
+                                ui.createPieAnalysisGraph('analysis-pie-graph-text')
+                            ])
+                        ])
                     ])
+                    ]),
                 ]),
                 html.Li(children=[
                     html.Div(className="collapsible-header", children=[
@@ -108,37 +126,48 @@ app.layout = html.Div(children=[
                         html.Div(id='analyse-file-upload-container', children=[
                             html.Div(className="row mb-3",children=[
                                 html.Div(className="col s2", children=[
-                                    ui.crateSelectLanguageDropdown(data.createLanguageKeysSet(languageMap), "analysis-language-dropdown")
+                                    ui.crateSelectLanguageDropdown(data.createLanguageKeysSet(languageMap), "analysis-language-dropdown-file")
                                 ]),
                                 html.Div(className="col s2", children=[
-                                    ui.createSelectNGramDropdown("analysis-ngram-dropdown"),
+                                    ui.createSelectNGramDropdown("analysis-ngram-dropdown-file"),
                                 ])
                             ]),
                             html.Div(className="row",children=[
                                 html.Div(className="col s8", children=[
-                                    ui.createAnalysisBarGraphMonograms("analysis-bar-graph-monograms")
+                                    ui.createAnalysisBarGraphMonograms("analysis-bar-graph-file")
                                 ]),
                                 html.Div(className="col s4", children=[
-                                    "stuff here!"
+                                    ui.createPieAnalysisGraph('analysis-pie-graph-file')
                                 ])
-                            ])                            
+                            ])
                         ])
                     ])
                 ])
-            ])            
+            ])
         ], id='data-analysis-section', className="hide"),
     ],id="main-content", className="container")
 ], id="main-container")
 
 
+@app.callback(Output('analyse-file-upload-input', 'children'),
+                [Input('analyse-file-upload-input', 'filename')])
+def update_upload(filename):
+    if filename != None:
+        return html.Div([
+            filename
+        ])
+    return html.Div([
+        'Przeciągnij plik lub ',
+        html.A('wybierz')
+    ])
 
-# @app.callback(Output('analysis-bar-graph-monograms', 'figure'),
-#             [Input('analyse-button', 'n_clicks')],
-#             [State('analysis_lang_dropdown', 'value'),
-#              State('analysis_ngram_dropdown', 'value'),
-#              State('analyse-file-upload-input', 'contents'),
-#              State('analyse-text-input', 'value')])
-def try_to_analyse_text(clicks, language, nGramType, fileContent, textContent):
+
+@app.callback(Output('analysis-bar-graph-file', 'figure'),
+            [Input('analyse-file-btn', 'n_clicks')],
+            [State('analysis-language-dropdown-file', 'value'),
+             State('analysis-ngram-dropdown-file', 'value'),
+             State('analyse-file-upload-input', 'contents')])
+def try_to_analyse_text(clicks, language, nGramType, fileContent):
     #If empty and empty: do nothing
     input_arr = []
     # default get from file
@@ -167,28 +196,105 @@ def try_to_analyse_text(clicks, language, nGramType, fileContent, textContent):
             )
         return figure
     # Get from text area
-    elif textContent != None:
+    # elif textContent != None:
+    #     selected = data.findLanguageDataByKeyAndNgram(language, nGramType, languageMap)
+    #     flat_map = data.getNgramFlatMap(nGramType, textContent)
+    #     monogram_counter = Counter(flat_map)
+    #     mono_data = [[count, monogram_counter[count]]for count in monogram_counter]
+    #     result = {
+    #             "language": "Input",
+    #             "ngramType": nGramType,
+    #             "data": mono_data,
+    #             "totalDataCount": data.sumNgrams(mono_data)
+    #     }
+    #     sorted_result = data.sortData(result)
+    #     sorted_selected = data.sortData(selected)
+    #     input_arr.append(sorted_selected)
+    #     input_arr.append(sorted_result)
+    #
+    #     figure = go.Figure(
+    #             data = ui.createGoBar(input_arr),
+    #             layout = go.Layout(title="Analiza tekstu", barmode="stack")
+    #         )
+    #     return figure
+    return []
+
+@app.callback(Output('analysis-bar-graph-text', 'figure'),
+            [Input('analyse-text-btn', 'n_clicks')],
+            [State('analysis-language-dropdown-text', 'value'),
+             State('analysis-ngram-dropdown-text', 'value'),
+             State('analyse-text-input', 'value')])
+def try_to_analyse_text(clicks, language, nGramType, textContent):
+    input_arr = []
+    if textContent != None:
         selected = data.findLanguageDataByKeyAndNgram(language, nGramType, languageMap)
         flat_map = data.getNgramFlatMap(nGramType, textContent)
         monogram_counter = Counter(flat_map)
         mono_data = [[count, monogram_counter[count]]for count in monogram_counter]
         result = {
-                "language": "Input",
-                "ngramType": nGramType,
-                "data": mono_data,
-                "totalDataCount": data.sumNgrams(mono_data)
-        }
+            "language": "Input",
+            "ngramType": nGramType,
+            "data": mono_data,
+            "totalDataCount": data.sumNgrams(mono_data)
+            }
         sorted_result = data.sortData(result)
         sorted_selected = data.sortData(selected)
         input_arr.append(sorted_selected)
         input_arr.append(sorted_result)
 
         figure = go.Figure(
-                data = ui.createGoBar(input_arr),
-                layout = go.Layout(title="Analiza tekstu", barmode="stack")
-            )
+            data = ui.createGoBar(input_arr),
+            layout = go.Layout(title="Analiza tekstu", barmode="stack")
+        )
         return figure
     return []
+
+
+@app.callback(Output('analysis-pie-graph-file', 'figure'),
+            [Input('analysis-bar-graph-file', 'clickData')],
+            [State('analysis-ngram-dropdown-file', 'value')])
+def on_data_clicked(dataClicked, nGramType):
+    results = []
+    total_count = 0
+    nGram = dataClicked['points'][0]['x']
+    for lang in languageMap:
+        if lang['ngramType'] == nGramType:
+            for ngrams in lang['data']:
+                if ngrams[0] == nGram:
+                    #get percent
+                    percent_value = float(ngrams[1])/float(lang['totalDataCount'])*100
+                    total_count += percent_value
+                    result = {'language': lang['language'], 'nGram': nGram, 'value': percent_value}
+                    results.append(result)
+    final_result = []
+    for result in results:
+        result['value'] = result['value'] / total_count * 100
+        final_result.append(result)
+    figure = ui.createPieBar(final_result)
+    return figure
+
+@app.callback(Output('analysis-pie-graph-text', 'figure'),
+            [Input('analysis-bar-graph-text', 'clickData')],
+            [State('analysis-ngram-dropdown-text', 'value')])
+def on_data_clicked(dataClicked, nGramType):
+    results = []
+    total_count = 0
+    nGram = dataClicked['points'][0]['x']
+    for lang in languageMap:
+        if lang['ngramType'] == nGramType:
+            for ngrams in lang['data']:
+                if ngrams[0] == nGram:
+                    #get percent
+                    percent_value = float(ngrams[1])/float(lang['totalDataCount'])*100
+                    total_count += percent_value
+                    result = {'language': lang['language'], 'nGram': nGram, 'value': percent_value}
+                    results.append(result)
+    final_result = []
+    for result in results:
+        result['value'] = result['value'] / total_count * 100
+        final_result.append(result)
+    figure = ui.createPieBar(final_result)
+    return figure
 
 # start application
 if __name__ == '__main__':

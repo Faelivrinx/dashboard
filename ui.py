@@ -90,6 +90,27 @@ def createSelectNGramDropdown(id):
         value='monograms',
         clearable=False
     )
+def createPieAnalysisGraph(id):
+    return dcc.Graph(
+        id = id,
+        figure=go.Figure(
+            data=[
+                go.Pie(labels=[],
+                        values=[]
+                    )],
+                layout=go.Layout(title='Not selected ngram'))
+    )
+
+def createPieBar(resultMap):
+    languages = [result['language'] for result in resultMap]
+    values = [result['value'] for result in resultMap]
+    
+    figure = go.Figure(
+        data=[go.Pie(labels=languages,
+                    values=values
+                )],
+            layout=go.Layout(title="Ngram: " + " '" + resultMap[0]['nGram']+"'"))
+    return figure
 
 def createGoBar(languageMap):
     bars = []
