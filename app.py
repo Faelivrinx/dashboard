@@ -103,41 +103,38 @@ app.layout = html.Div(children=[
                             },
                             multiple=False
                         ),
-                        html.Button(className="btn blue darken-2 waves-effect waves-light", children=['Analizuj plik'], id='analyse-file-btn')
+                        html.Button(className="btn blue darken-2 waves-effect waves-light mb-4", children=['Analizuj plik'], id='analyse-file-btn'),
+                        html.Div(id='analyse-file-upload-container', children=[
+                            html.Div(className="row mb-3",children=[
+                                html.Div(className="col s2", children=[
+                                    ui.createAnalysisLangDropdown(data.createLanguageKeysSet(languageMap))
+                                ]),
+                                html.Div(className="col s2", children=[
+                                    ui.createAnalysisNGramDropdown(),
+                                ])
+                            ]),
+                            html.Div(className="row",children=[
+                                html.Div(className="col s8", children=[
+                                    ui.createAnalysisBarGraphMonograms()
+                                ]),
+                                html.Div(className="col s4", children=[
+                                    "stuff here!"
+                                ])
+                            ])                            
+                        ])
                     ])
                 ])
-            ]),
-            html.Div(id='output-container-button', children='Enter a value and press submit'),
-            html.Div(id='output-container-second', children='Enter a value and press'),
-            html.Div(id='result-container', children=[
-                ui.createAnalysisLangDropdown(data.createLanguageKeysSet(languageMap)),
-                ui.createAnalysisNGramDropdown(),
-                ui.createAnalysisBarGraphMonograms(),
-            ]),
-            html.Button(id='analyse-button', children='Analyse'),
-            html.Div(id='test_output', children=[])
+            ])            
         ], id='data-analysis-section', className="hide"),
     ],id="main-content", className="container")
 ], id="main-container")
 
-#callbacks
-@app.callback(
-    Output('output-container-button', 'children'),
-    [Input('analyse-text-btn', 'n_clicks')],
-    [State('analyse-text-input', 'value')])
-def update_output(n_clicks, value):
-    return 'The input value was "{}" and the button has been clicked {} times'.format(
-        value,
-        n_clicks
-    )
-
-
-@app.callback(Output('analysis-bar-graph-monograms', 'figure'),
-            [Input('analyse-button', 'n_clicks')],
-            [State('analysis_lang_dropdown', 'value'),
-             State('analysis_ngram_dropdown', 'value'),
-             State('analyse-file-upload-input', 'contents'),
-             State('analyse-text-input', 'value')])
+# @app.callback(Output('analysis-bar-graph-monograms', 'figure'),
+#             [Input('analyse-button', 'n_clicks')],
+#             [State('analysis_lang_dropdown', 'value'),
+#              State('analysis_ngram_dropdown', 'value'),
+#              State('analyse-file-upload-input', 'contents'),
+#              State('analyse-text-input', 'value')])
 def try_to_analyse_text(clicks, language, nGramType, fileContent, textContent):
     #If empty and empty: do nothing
     input_arr = []
@@ -189,21 +186,6 @@ def try_to_analyse_text(clicks, language, nGramType, fileContent, textContent):
             )
         return figure
     return []
-
-@app.callback(Output('test_output', 'children'),
-            [Input('analysis-bar-graph-monograms', 'clickData')])
-def on_data_clicked(dataClicked):
-    print(dataClicked['points'][0]['x'])
-    return ''
-
-@app.callback(Output('result-container', 'style'),
-            [Input('analyse-button', 'n_clicks')])
-def show_container(clicks):
-    print(clicks)
-    style = {'visibility': 'hidden'}
-    if clicks > 0:
-        style['visibility'] = 'visible'
-    return style
 
 # start application
 if __name__ == '__main__':
