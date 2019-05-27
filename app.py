@@ -107,24 +107,24 @@ app.layout = html.Div(children=[
                         html.Div(id='analyse-file-upload-container', children=[
                             html.Div(className="row mb-3",children=[
                                 html.Div(className="col s2", children=[
-                                    ui.crateSelectLanguageDropdown(data.createLanguageKeysSet(languageMap), "analysis-language-dropdown")
+                                    ui.crateSelectLanguageDropdown(data.createLanguageKeysSet(languageMap), "analysis-language-dropdown-file")
                                 ]),
                                 html.Div(className="col s2", children=[
-                                    ui.createSelectNGramDropdown("analysis-ngram-dropdown"),
+                                    ui.createSelectNGramDropdown("analysis-ngram-dropdown-file"),
                                 ])
                             ]),
                             html.Div(className="row",children=[
                                 html.Div(className="col s8", children=[
-                                    ui.createAnalysisBarGraphMonograms("analysis-bar-graph-monograms")
+                                    ui.createAnalysisBarGraphMonograms("analysis-bar-graph-file")
                                 ]),
                                 html.Div(className="col s4", children=[
                                     "stuff here!"
                                 ])
-                            ])                            
+                            ])
                         ])
                     ])
                 ])
-            ])            
+            ])
         ], id='data-analysis-section', className="hide"),
     ],id="main-content", className="container")
 ], id="main-container")
@@ -135,7 +135,12 @@ app.layout = html.Div(children=[
 #              State('analysis_ngram_dropdown', 'value'),
 #              State('analyse-file-upload-input', 'contents'),
 #              State('analyse-text-input', 'value')])
-def try_to_analyse_text(clicks, language, nGramType, fileContent, textContent):
+@app.callback(Output('analysis-bar-graph-file', 'figure'),
+            [Input('analyse-file-btn', 'n_clicks')],
+            [State('analysis-language-dropdown-file', 'value'),
+             State('analysis-ngram-dropdown-file', 'value'),
+             State('analyse-file-upload-input', 'contents'),])
+def try_to_analyse_text(clicks, language, nGramType, fileContent):
     #If empty and empty: do nothing
     input_arr = []
     # default get from file
@@ -164,27 +169,27 @@ def try_to_analyse_text(clicks, language, nGramType, fileContent, textContent):
             )
         return figure
     # Get from text area
-    elif textContent != None:
-        selected = data.findLanguageDataByKeyAndNgram(language, nGramType, languageMap)
-        flat_map = data.getNgramFlatMap(nGramType, textContent)
-        monogram_counter = Counter(flat_map)
-        mono_data = [[count, monogram_counter[count]]for count in monogram_counter]
-        result = {
-                "language": "Input",
-                "ngramType": nGramType,
-                "data": mono_data,
-                "totalDataCount": data.sumNgrams(mono_data)
-        }
-        sorted_result = data.sortData(result)
-        sorted_selected = data.sortData(selected)
-        input_arr.append(sorted_selected)
-        input_arr.append(sorted_result)
-
-        figure = go.Figure(
-                data = ui.createGoBar(input_arr),
-                layout = go.Layout(title="Analiza tekstu", barmode="stack")
-            )
-        return figure
+    # elif textContent != None:
+    #     selected = data.findLanguageDataByKeyAndNgram(language, nGramType, languageMap)
+    #     flat_map = data.getNgramFlatMap(nGramType, textContent)
+    #     monogram_counter = Counter(flat_map)
+    #     mono_data = [[count, monogram_counter[count]]for count in monogram_counter]
+    #     result = {
+    #             "language": "Input",
+    #             "ngramType": nGramType,
+    #             "data": mono_data,
+    #             "totalDataCount": data.sumNgrams(mono_data)
+    #     }
+    #     sorted_result = data.sortData(result)
+    #     sorted_selected = data.sortData(selected)
+    #     input_arr.append(sorted_selected)
+    #     input_arr.append(sorted_result)
+    #
+    #     figure = go.Figure(
+    #             data = ui.createGoBar(input_arr),
+    #             layout = go.Layout(title="Analiza tekstu", barmode="stack")
+    #         )
+    #     return figure
     return []
 
 # start application
