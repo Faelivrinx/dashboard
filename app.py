@@ -129,12 +129,7 @@ app.layout = html.Div(children=[
     ],id="main-content", className="container")
 ], id="main-container")
 
-# @app.callback(Output('analysis-bar-graph-monograms', 'figure'),
-#             [Input('analyse-button', 'n_clicks')],
-#             [State('analysis_lang_dropdown', 'value'),
-#              State('analysis_ngram_dropdown', 'value'),
-#              State('analyse-file-upload-input', 'contents'),
-#              State('analyse-text-input', 'value')])
+
 @app.callback(Output('analysis-bar-graph-file', 'figure'),
             [Input('analyse-file-btn', 'n_clicks')],
             [State('analysis-language-dropdown-file', 'value'),

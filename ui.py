@@ -88,7 +88,22 @@ def createSelectNGramDropdown(id):
         ],
         value='monograms'
     )
+def createPieAnalysisGraph():
+    return dcc.Graph(
+        id = "analysis-pie-graph",
+        figure=go.Figure(
+            data = createGoPie(),
+            layout = go.Layout(title="Ngram", barmode="stack")
+        )
+    )
 
+def createGoPie():
+    return [
+        {
+            'values': [],
+            'type': 'pie',
+        },
+    ]
 def createGoBar(languageMap):
     bars = []
 
