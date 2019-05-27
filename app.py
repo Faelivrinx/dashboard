@@ -21,6 +21,20 @@ app.layout = html.Div(children=[
     ui.createNavbar(),
     html.Section(children=[
         html.Div(children=[
+            # project intro layout
+            ui.createSectionHeader("Prezentacja projektu"),
+            html.Div(className="row",children=[
+                html.Div(className="col s12", children=[
+                    html.Div(className="card-panel dataIntro1", children=[
+                        ui.createApostrophTitle("Ilość wczytanych monogramów")
+                    ])]),
+                html.Div(className="col s12", children=[
+                    html.Div(className="card-panel", children=[
+                        ui.createApostrophTitle("Ilość wczytanych monogramów")
+                    ])])
+            ])
+        ], id='project-intro-section', className="hide"),
+        html.Div(children=[
             # Data presentation
             ui.createSectionHeader("Prezentacja danych"),
             html.Div(className="row", children=[

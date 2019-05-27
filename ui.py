@@ -28,6 +28,9 @@ def createNavbar():
 def createSectionHeader(title):
     return html.H3(title, className="bold blue-text text-darken-2")
 
+def createApostrophTitle(title):
+    return html.H5(title, className="bold blue-text text-darken-2")
+
 def createDataPresentationTabMenu():
     return html.Div(className="col s12", children=[
                 html.Ul(className="tabs card", children=[
