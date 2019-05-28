@@ -31,9 +31,18 @@ app.layout = html.Div(children=[
                     html.Div(className="card-panel dataIntro1", children=[
                         ui.createApostrophTitle("Cel do osiągnięcia"),
                         html.P("Celem niniejszego projektu było zaprojektowanie kokpitu do interaktywnej prezentacji danych dotyczących różnic w częstotliwości występowania liter, di- oraz trigramów w różnych językach. "
-                        + "Językami, nad którymi od początku pracowała nasza grupa (8) były czeski, niemiecki, ukraiński oraz węgierski. "
+                        + "Językami, które przygotowaliśmy jako dane do porównania pochodzą ze strony: http://practicalcryptography.com oraz przykładowe pliki JSON od innej grupy. "
                         + "Projekt przygotowano z myślą o dołączeniu do niego pozostałych języków, nad którymi pracowały inne grupy tak, by mieć docelowo komplet interaktywnych wizualizacji dla wszystkich 16 języków.", className="")
                     ])]),
+                html.Div(className="col s12", children=[
+                        html.Div(className="card-panel", children=[
+                            html.Img(className="ml-3", src="./assets/img/flags/czech.png", height="42px"),
+                            html.Img(className="ml-3", src="./assets/img/flags/english.png", height="42px"),
+                            html.Img(className="ml-3", src="./assets/img/flags/german.png", height="42px"),
+                            html.Img(className="ml-3", src="./assets/img/flags/hungary.png", height="42px"),
+                            html.Img(className="ml-3", src="./assets/img/flags/spanish.png", height="42px")
+                        ])
+                    ]),
                 html.Div(className="col s12", children=[
                     html.Div(className="card-panel", children=[
                         ui.createApostrophTitle("Działanie aplikacji "),
@@ -41,42 +50,41 @@ app.layout = html.Div(children=[
                         html.P("Po wyborze pierwszej z nich, w ręce użytkownika oddane są narzędzia, dzięki którym może on wybrać spośród różnych dostępnych języków oraz wyświetlić częstotliwość występujących w nim n-gramów. "
                         + "Po zaznaczeniu konkretnego n-gramu wyświetlany jest wykres kołowy ilustrujący częstotliwość jego występowania w innych językach. ", className=""),
                         html.P("Po wyborze sekcji analizy, użytkownik dostaje do wyboru możliwość analizy wklejonego tekstu, bądź też tekstu z załadowanego pliku. "
-                        + "W obydwu przypadkach analiza odbywa się w ten sam sposób - po wklejeniu tekstu/załadowaniu pliku użytkownik wybiera do którego spośród dostępnych języków chce porównać swój input oraz w jakim n-gramie chce dostać wyniki. "
+                        + "W obydwu przypadkach analiza odbywa się w ten sam sposób - po wklejeniu tekstu/załadowaniu pliku użytkownik wybiera do którego spośród dostępnych języków chce porównać swoje dane oraz w jakim n-gramie chce dostać wyniki. "
                         + "Podobnie, jak w sekcji prezentacji danych, po wyborze konkretnego n-gramu pojawia się wykres kołowy dodatkowych informacji na jego temat.", className="")
                     ])]),
                 html.Div(className="col s12", children=[
-                    html.Div(className="card-panel dataIntro1", children=[
-                        ui.createApostrophTitle("Autorzy"),
-                        html.P("Baczyński Konrad\n "
-                        + "Bigaj Adam\n "
-                        + "Jurasz Dominik", className="")
+                    html.Div(className="card-panel blue white-text dataIntro1", children=[
+                        html.P(className="bold white-text", children=["Autorzy: Baczyński Konrad, Bigaj Adam, Jurasz Dominik"])
                     ])]),
             ])
         ], id='project-intro-section', className="hide"),
         html.Div(children=[
             # Data presentation
             ui.createSectionHeader("Prezentacja danych"),
-            html.Div(className="row mb-3",children=[
-                html.Div(className="col s6 m4 l2", children=[
-                    ui.crateSelectLanguageDropdown(data.createLanguageKeysSet(languageMap), "presentation-language-dropdown")
+            html.Div(className="card-panel", children=[
+                html.Div(className="row mb-3",children=[
+                    html.Div(className="col s6 m4 l2", children=[
+                        ui.crateSelectLanguageDropdown(data.createLanguageKeysSet(languageMap), "presentation-language-dropdown")
+                    ]),
+                    html.Div(className="col s6 m4 l2", children=[
+                        ui.createSelectNGramDropdown("presentation-ngram-dropdown"),
+                    ])
                 ]),
-                html.Div(className="col s6 m4 l2", children=[
-                    ui.createSelectNGramDropdown("presentation-ngram-dropdown"),
-                ])
-            ]),
-            html.Div(className="row",children=[
-                html.Div(className="col m12 l8", children=[
-                    ui.createAnalysisBarGraphNgrams("presentation-bar-graph"),
-                    dcc.Slider(
-                        id='presentation-items-slider',
-                        min=3,
-                        max=45,
-                        value=15,
-                        step=3
-                    )
-                ]),
-                html.Div(className="col m12 l4", children=[
-                    ui.createPieAnalysisGraph('presentation-pie-graph')
+                html.Div(className="row",children=[
+                    html.Div(className="col m12 l8", children=[
+                        ui.createAnalysisBarGraphNgrams("presentation-bar-graph"),
+                        dcc.Slider(
+                            id='presentation-items-slider',
+                            min=3,
+                            max=45,
+                            value=15,
+                            step=3
+                        )
+                    ]),
+                    html.Div(className="col m12 l4", children=[
+                        ui.createPieAnalysisGraph('presentation-pie-graph')
+                    ])
                 ])
             ])
         ], id='data-presentation-section', className="hide"),
@@ -89,7 +97,7 @@ app.layout = html.Div(children=[
                         html.I(className="material-icons", children=["short_text"]),
                         "Wczytaj z pola tekstowego"
                     ]),
-                    html.Div(className="collapsible-body grey lighten-5", children=[
+                    html.Div(className="collapsible-body white", children=[
                         html.Div(className="input-field mb-4", children=[
                         dcc.Textarea(
                             maxLength="2000",
@@ -128,7 +136,7 @@ app.layout = html.Div(children=[
                         html.I(className="material-icons", children=["insert_drive_file"]),
                         "Wczytaj z pliku"
                     ]),
-                    html.Div(className="collapsible-body grey lighten-5", children=[
+                    html.Div(className="collapsible-body white", children=[
                         dcc.Upload(
                             className="mb-4",
                             id='analyse-file-upload-input',

@@ -10,7 +10,15 @@ body {
     background-color: #efebe9;
     background-blend-mode: darken;
     background-position: center;
-    
+    background-repeat: no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
 }
 
 .background-image {
