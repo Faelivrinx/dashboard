@@ -13,18 +13,21 @@ const app = (() => {
                 projectIntroSectionLink: document.querySelector("#project-intro"),
                 tabs: document.querySelector(".tabs"),
                 dataIntro1: document.querySelector(".dataIntro1"),
+                collapsible: document.querySelector(".collapsible")
             }
 
             // initialize tabs
+            M.AutoInit();
+
+            const collapsibleInstance = M.Collapsible.init(element.collapsible, {onOpenStart: ()=>{window.dispatchEvent(new Event('resize'));}});
             const tabsInstance = M.Tabs.init(element.tabs, {swipeable: false, onShow: ()=>{window.dispatchEvent(new Event('resize'));}});
+            
             tabsInstance.select('tab-monograms');
             tabsInstance.updateTabIndicator();
 
             const createDataIntroAttribute = (hintText, element) => {
                 element.setAttribute("data-intro", hintText)
             }
-
-            
 
             const showAnalysisSection = () => {
                 element.analysisSection.classList.remove("hide")
@@ -65,11 +68,12 @@ const app = (() => {
             element.presentationSectionLink.addEventListener("click", () => {
                 showPresentationSection()
             })
-            // showPresentationSection();
-
+        
             element.projectIntroSectionLink.addEventListener("click", () => {
                 showProjectIntroSection()
             })
+            
+            showProjectIntroSection()
             console.log("initComplete")
         }
     }

@@ -26,11 +26,17 @@ app.layout = html.Div(children=[
             html.Div(className="row",children=[
                 html.Div(className="col s12", children=[
                     html.Div(className="card-panel dataIntro1", children=[
-                        ui.createApostrophTitle("Ilość wczytanych monogramów")
+                        ui.createApostrophTitle("Cel do osiągnięcia"),
+                        html.P("Celem niniejszego projektu było zaprojektowanie kokpitu do interaktywnej prezentacji danych dotyczących różnic w częstotliwości występowania liter, di- oraz trigramów w różnych językach. "
+                        + "Językami, nad którymi od początku pracowała nasza grupa (8) były czeski, niemiecki, ukraiński oraz węgierski. "
+                        + "Projekt przygotowano z myślą o dołączeniu do niego pozostałych języków, nad którymi pracowały inne grupy tak, by mieć docelowo komplet interaktywnych wizualizacji dla wszystkich 16 języków.", className="")
                     ])]),
                 html.Div(className="col s12", children=[
                     html.Div(className="card-panel", children=[
-                        ui.createApostrophTitle("Ilość wczytanych monogramów")
+                        ui.createApostrophTitle("Działanie aplikacji "),
+                        html.P("W zależności od celu użytkownika, alikacja pozwala na różne czynności ukryte pod dwiema opcjami ulokowanymi w prawej, górnej części ekranu - Prezentacja danych oraz Analiza danych. ", className=""),
+                        html.P("Po wyborze pierwszej z nich, w ręce użytkownika oddane są narzędzia, dzięki którym może on wybrać spośród różnych dostępnych języków oraz wyświetlić częstotliwość występujących w nim n-gramów. "
+                        + "Po zaznaczeniu konkretnego n-gramu wyświetlany jest wykres kołowy ilustrujący częstotliwość jego występowania w innych językach. ", className="")
                     ])])
             ])
         ], id='project-intro-section', className="hide"),
@@ -136,6 +142,7 @@ app.layout = html.Div(children=[
                             multiple=False
                         ),
                         html.Button(className="btn blue darken-2 waves-effect waves-light mb-4", children=['Analizuj plik'], id='analyse-file-btn'),
+                        ui.createShowPredictionLanguageCard("hu"),
                         html.Div(id='analyse-file-upload-container', children=[
                             html.Div(className="row mb-3",children=[
                                 html.Div(className="col s2", children=[

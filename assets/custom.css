@@ -9,3 +9,11 @@
 body {
     background-color: #efebe9
 }
+
+.js-plotly-plot .plotly .modebar {
+    /* position: absolute;
+    bottom: 2px;
+    left: 2px;
+    top: auto;
+    right: auto; */
+}
