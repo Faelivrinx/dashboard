@@ -1,1 +1,1 @@
-docker run --it --rm --name dashboard-python -d dashboard-python
+docker run -p 8050:8050 --name dashboard-python -d faelivrinx/dashboard-python

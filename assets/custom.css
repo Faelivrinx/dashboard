@@ -1,0 +1,48 @@
+#main-container {
+    height: 100vh;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+body {
+    background-color: #efebe9;
+    background-blend-mode: darken;
+    background-position: center;
+    background-repeat: no-repeat;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+.background-image {
+    background-position: center;
+    height: 100vh;
+    z-index: 2;
+}
+
+.js-plotly-plot .plotly .modebar {
+    /* position: absolute;
+    bottom: 2px;
+    left: 2px;
+    top: auto;
+    right: auto; */
+}
+
+.logo {
+    max-height: 46px;
+    margin: 13px;
+    cursor: pointer;
+}
+
+#helpBtn {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+}
