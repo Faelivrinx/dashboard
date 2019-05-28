@@ -9,9 +9,13 @@ const app = (() => {
                 presentationSectionLink: document.querySelector("#data-presentation"),
                 analysisSection: document.querySelector("#data-analysis-section"),
                 analysisSectionLink: document.querySelector("#data-analysis"),
+                projectIntroSection: document.querySelector("#project-intro-section"),
+                projectIntroSectionLink: document.querySelector("#project-intro"),
                 tabs: document.querySelector(".tabs"),
+                dataIntro1: document.querySelector(".dataIntro1"),
                 collapsible: document.querySelector(".collapsible")
             }
+
             // initialize tabs
             M.AutoInit();
 
@@ -21,16 +25,40 @@ const app = (() => {
             // tabsInstance.select('tab-monograms');
             // tabsInstance.updateTabIndicator();
 
+            const createDataIntroAttribute = (hintText, element) => {
+                element.setAttribute("data-intro", hintText)
+            }
+
             const showAnalysisSection = () => {
                 element.analysisSection.classList.remove("hide")
                 element.presentationSection.classList.remove("hide")
                 element.presentationSection.classList.add("hide")
+                element.projectIntroSection.classList.remove("hide")
+                element.projectIntroSection.classList.add("hide")
             }
 
             const showPresentationSection = () => {
                 element.presentationSection.classList.remove("hide")
                 element.analysisSection.classList.remove("hide")
                 element.analysisSection.classList.add("hide")
+                element.projectIntroSection.classList.remove("hide")
+                element.projectIntroSection.classList.add("hide")
+            }
+
+            const showProjectIntroSection = () => {
+                element.projectIntroSection.classList.remove("hide")
+                element.analysisSection.classList.remove("hide")
+                element.analysisSection.classList.add("hide")
+                element.presentationSection.classList.remove("hide")
+                element.presentationSection.classList.add("hide")
+                //initialization introJS
+                if(!localStorage.getItem("wasProjectIntroSectionVisited")){
+                    // creating dataIntro attributes
+                    createDataIntroAttribute("dziaba",element.dataIntro1)
+
+                    introJs().start();
+                    localStorage.setItem("wasProjectIntroSectionVisited", true)
+                }
             }
 
             element.analysisSectionLink.addEventListener("click", () => {
@@ -40,7 +68,12 @@ const app = (() => {
             element.presentationSectionLink.addEventListener("click", () => {
                 showPresentationSection()
             })
-            showPresentationSection();
+        
+            element.projectIntroSectionLink.addEventListener("click", () => {
+                showProjectIntroSection()
+            })
+            
+            showProjectIntroSection()
             console.log("initComplete")
         }
     }
