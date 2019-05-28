@@ -7,7 +7,16 @@
 }
 
 body {
-    background-color: #efebe9
+    background-color: #efebe9;
+    background-blend-mode: darken;
+    background-position: center;
+    
+}
+
+.background-image {
+    background-position: center;
+    height: 100vh;
+    z-index: 2;
 }
 
 .js-plotly-plot .plotly .modebar {
@@ -16,4 +25,10 @@ body {
     left: 2px;
     top: auto;
     right: auto; */
+}
+
+.logo {
+    max-height: 46px;
+    margin: 13px;
+    cursor: pointer;
 }

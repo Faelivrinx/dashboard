@@ -17,7 +17,8 @@ def createLanguagesDropdown(languages):
 def createNavbar():
     return html.Nav(children=[
         html.Div(children=[
-            html.A("dash-board", className="brand-logo", id="project-intro"),
+            # html.A("dash-board", className="brand-logo", id="project-intro"),
+            html.Img(src="assets/img/boardPy-logo.png", alt="boardPy", id="project-intro", className="logo"),
             html.Ul(children=[
                 html.Li(children=[html.A(children=[html.I("dashboard",className="material-icons left"),"Prezentacja danych"], className="waves-effect waves-light")], id="data-presentation"),
                 html.Li(children=[html.A(children=[html.I("equalizer",className="material-icons left"), "Analiza danych"], className="waves-effect waves-light")], id="data-analysis")

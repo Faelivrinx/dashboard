@@ -35,6 +35,10 @@ const app = (() => {
                 element.presentationSection.classList.add("hide")
                 element.projectIntroSection.classList.remove("hide")
                 element.projectIntroSection.classList.add("hide")
+                // document.getElementsByClassName("background-image").style.backgroundImage="url('assets/img/accounting-close-up-computation-1418347.jpg')"
+                document.body.style.backgroundImage="url('assets/img/accounting-close-up-computation-1418347.jpg')"
+                document.body.style.background.filter="brightness(30%)";
+
             }
 
             const showPresentationSection = () => {
@@ -43,6 +47,9 @@ const app = (() => {
                 element.analysisSection.classList.add("hide")
                 element.projectIntroSection.classList.remove("hide")
                 element.projectIntroSection.classList.add("hide")
+                // document.getElementsByClassName("background-image").style.backgroundImage="url('assets/img/adult-connection-desk-374720.jpg')"
+                document.body.style.backgroundImage="url('assets/img/adult-connection-desk-374720.jpg')"
+                document.body.style.background.filter="brightness(30%)";
             }
 
             const showProjectIntroSection = () => {
@@ -51,6 +58,10 @@ const app = (() => {
                 element.analysisSection.classList.add("hide")
                 element.presentationSection.classList.remove("hide")
                 element.presentationSection.classList.add("hide")
+                // document.getElementsByClassName("background-image").style.backgroundImage="url('assets/img/charts-data-desk-669615.jpg')"
+                document.body.style.backgroundImage="url('assets/img/charts-data-desk-669615.jpg')"
+                document.body.style.background.filter="brightness(30%)";
+
                 //initialization introJS
                 if(!localStorage.getItem("wasProjectIntroSectionVisited")){
                     // creating dataIntro attributes
