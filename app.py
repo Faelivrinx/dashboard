@@ -191,34 +191,34 @@ def try_to_analyse_text(clicks, language, nGramType, fileContent):
 
         #prepare similarity
         #select bigrams
-        selected_bigrams = data.findLanguageDataByKeyAndNgram(language, 'bigrams', languageMap)
-        flat_map_bigrams = data.getNgramFlatMap('bigrams', decoded_text)
-        bigrams_counter = Counter(flat_map_bigrams).most_common(n=25)
-        bigram_data = [[count[0], count[1]]for count in bigrams_counter]
-        result_bigrams = {
-                "language": "Input",
-                "ngramType": 'bigrams',
-                "data": bigram_data,
-                "totalDataCount": data.sumNgrams(bigram_data)
-        }
+        # selected_bigrams = data.findLanguageDataByKeyAndNgram(language, 'bigrams', languageMap)
+        # flat_map_bigrams = data.getNgramFlatMap('bigrams', decoded_text)
+        # bigrams_counter = Counter(flat_map_bigrams).most_common(n=25)
+        # bigram_data = [[count[0], count[1]]for count in bigrams_counter]
+        # result_bigrams = {
+        #         "language": "Input",
+        #         "ngramType": 'bigrams',
+        #         "data": bigram_data,
+        #         "totalDataCount": data.sumNgrams(bigram_data)
+        # }
+        #
+        # #select trigrams
+        # selected_trigrams = data.findLanguageDataByKeyAndNgram(language, 'trigrams', languageMap)
+        # flat_map_trigrams = data.getNgramFlatMap('trigrams', decoded_text)
+        # trigrams_counter = Counter(flat_map_trigrams).most_common(n=25)
+        # trigram_data = [[count[0], count[1]]for count in trigrams_counter]
+        # result_trigrams = {
+        #         "language": "Input",
+        #         "ngramType": 'trigrams',
+        #         "data": trigram_data,
+        #         "totalDataCount": data.sumNgrams(trigram_data)
+        # }
+        #
+        # similarity = []
+        # similarity.append(result_bigrams)
+        # similarity.append(result_trigrams)
 
-        #select trigrams
-        selected_trigrams = data.findLanguageDataByKeyAndNgram(language, 'trigrams', languageMap)
-        flat_map_trigrams = data.getNgramFlatMap('trigrams', decoded_text)
-        trigrams_counter = Counter(flat_map_trigrams).most_common(n=25)
-        trigram_data = [[count[0], count[1]]for count in trigrams_counter]
-        result_trigrams = {
-                "language": "Input",
-                "ngramType": 'trigrams',
-                "data": trigram_data,
-                "totalDataCount": data.sumNgrams(trigram_data)
-        }
-
-        similarity = []
-        similarity.append(result_bigrams)
-        similarity.append(result_trigrams)
-
-        most_probably_language = data.sortBySimilarity(languageMap, similarity)
+        # most_probably_language = data.sortBySimilarity(languageMap, similarity)
 
         figure = go.Figure(
                 data = ui.createGoBar(input_arr),
@@ -250,7 +250,7 @@ def try_to_analyse_text(clicks, language, nGramType, textContent):
         input_arr.append(sorted_selected)
         input_arr.append(sorted_result)
 
-        most_probably_language = data.sortBySimilarity(languageMap, result)
+        # most_probably_language = data.sortBySimilarity(languageMap, result)
 
 
         figure = go.Figure(
