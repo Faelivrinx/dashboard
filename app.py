@@ -25,7 +25,7 @@ app.layout = html.Div(children=[
     html.Section(children=[
         html.Div(children=[
             # project intro layout
-            ui.createSectionHeader("Prezentacja projektu"),
+            ui.createSectionHeader("O projekcie"),
             html.Div(className="row",children=[
                 html.Div(className="col s12", children=[
                     html.Div(className="card-panel dataIntro1", children=[
@@ -39,8 +39,18 @@ app.layout = html.Div(children=[
                         ui.createApostrophTitle("Działanie aplikacji "),
                         html.P("W zależności od celu użytkownika, alikacja pozwala na różne czynności ukryte pod dwiema opcjami ulokowanymi w prawej, górnej części ekranu - Prezentacja danych oraz Analiza danych. ", className=""),
                         html.P("Po wyborze pierwszej z nich, w ręce użytkownika oddane są narzędzia, dzięki którym może on wybrać spośród różnych dostępnych języków oraz wyświetlić częstotliwość występujących w nim n-gramów. "
-                        + "Po zaznaczeniu konkretnego n-gramu wyświetlany jest wykres kołowy ilustrujący częstotliwość jego występowania w innych językach. ", className="")
-                    ])])
+                        + "Po zaznaczeniu konkretnego n-gramu wyświetlany jest wykres kołowy ilustrujący częstotliwość jego występowania w innych językach. ", className=""),
+                        html.P("Po wyborze sekcji analizy, użytkownik dostaje do wyboru możliwość analizy wklejonego tekstu, bądź też tekstu z załadowanego pliku. "
+                        + "W obydwu przypadkach analiza odbywa się w ten sam sposób - po wklejeniu tekstu/załadowaniu pliku użytkownik wybiera do którego spośród dostępnych języków chce porównać swój input oraz w jakim n-gramie chce dostać wyniki. "
+                        + "Podobnie, jak w sekcji prezentacji danych, po wyborze konkretnego n-gramu pojawia się wykres kołowy dodatkowych informacji na jego temat.", className="")
+                    ])]),
+                html.Div(className="col s12", children=[
+                    html.Div(className="card-panel dataIntro1", children=[
+                        ui.createApostrophTitle("Autorzy"),
+                        html.P("Baczyński Konrad\n "
+                        + "Bigaj Adam\n "
+                        + "Jurasz Dominik", className="")
+                    ])]),
             ])
         ], id='project-intro-section', className="hide"),
         html.Div(children=[
@@ -73,8 +83,8 @@ app.layout = html.Div(children=[
         html.Div(children=[
             # Data analysis
             ui.createSectionHeader("Analiza danych"),
-            html.Ul(className="collapsible",children=[
-                html.Li(children=[
+            html.Ul(className="collapsible", id="analysis-collapsible", children=[
+                html.Li(title="text", children=[
                     html.Div(className="collapsible-header", children=[
                         html.I(className="material-icons", children=["short_text"]),
                         "Wczytaj z pola tekstowego"
@@ -113,7 +123,7 @@ app.layout = html.Div(children=[
                     ])
                     ]),
                 ]),
-                html.Li(children=[
+                html.Li(title="file", children=[
                     html.Div(className="collapsible-header", children=[
                         html.I(className="material-icons", children=["insert_drive_file"]),
                         "Wczytaj z pliku"
@@ -165,7 +175,8 @@ app.layout = html.Div(children=[
                 ])
             ])
         ], id='data-analysis-section', className="hide"),
-    ],id="main-content", className="container")
+    ],id="main-content", className="container"),
+    html.A(id="helpBtn",className="btn-floating btn-large waves-effect waves-light red pulse", children=[html.I("help_outline",className="material-icons left")])
 ], id="main-container")
 
 @app.callback(

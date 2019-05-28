@@ -17,7 +17,8 @@ def createLanguagesDropdown(languages):
 def createNavbar():
     return html.Nav(children=[
         html.Div(children=[
-            html.A("dash-board", className="brand-logo", id="project-intro"),
+            # html.A("dash-board", className="brand-logo", id="project-intro"),
+            html.Img(src="assets/img/boardPy-logo.png", alt="boardPy", id="project-intro", className="logo"),
             html.Ul(children=[
                 html.Li(children=[html.A(children=[html.I("dashboard",className="material-icons left"),"Prezentacja danych"], className="waves-effect waves-light")], id="data-presentation"),
                 html.Li(children=[html.A(children=[html.I("equalizer",className="material-icons left"), "Analiza danych"], className="waves-effect waves-light")], id="data-analysis")
@@ -45,28 +46,6 @@ def createDataPresentationTabMenu():
                     ])
                 ])
             ])
-
-# def createMonogramBarGraph(languageMap):
-#     return dcc.Graph(id = "monogram-bar-graph", figure=go.Figure(
-#         data = createGoBar(languageMap),
-#         layout = go.Layout(title="Monogramy w różnych językach", barmode="stack"),
-
-#     ))
-
-# def createBigramBarGraph(languageMap):
-#     return dcc.Graph(id = "bigram-bar-graph", figure=go.Figure(
-#         data = createGoBar(languageMap),
-#         layout = go.Layout(title="Bigramy w różnych językach", barmode="stack")
-#     ))
-
-# def createTrigramBarGraph(languageMap):
-#     return dcc.Graph(
-#         id = "trigram-bar-graph",
-#         figure=go.Figure(
-#             data = createGoBar(languageMap),
-#             layout = go.Layout(title="Trigramy w różnych językach", barmode="stack")
-#         )
-#     )
 
 def createAnalysisBarGraphNgrams(id):
     return dcc.Graph(
