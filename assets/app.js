@@ -10,7 +10,8 @@ const app = (() => {
                 analysisSection: document.querySelector("#data-analysis-section"),
                 analysisSectionLink: document.querySelector("#data-analysis"),
                 tabs: document.querySelector(".tabs"),
-                collapsible: document.querySelector(".collapsible")
+                collapsible: document.querySelector(".collapsible"),
+                helpBtn: document.querySelector("#helpBtn")
             }
             // initialize tabs
             M.AutoInit();
