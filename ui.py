@@ -43,28 +43,29 @@ def createDataPresentationTabMenu():
                 ])
             ])
 
-def createMonogramBarGraph(languageMap):
-    return dcc.Graph(id = "monogram-bar-graph", figure=go.Figure(
-        data = createGoBar(languageMap),
-        layout = go.Layout(title="Monogramy w różnych językach", barmode="stack"),
+# def createMonogramBarGraph(languageMap):
+#     return dcc.Graph(id = "monogram-bar-graph", figure=go.Figure(
+#         data = createGoBar(languageMap),
+#         layout = go.Layout(title="Monogramy w różnych językach", barmode="stack"),
 
-    ))
+#     ))
 
-def createBigramBarGraph(languageMap):
-    return dcc.Graph(id = "bigram-bar-graph", figure=go.Figure(
-        data = createGoBar(languageMap),
-        layout = go.Layout(title="Bigramy w różnych językach", barmode="stack")
-    ))
+# def createBigramBarGraph(languageMap):
+#     return dcc.Graph(id = "bigram-bar-graph", figure=go.Figure(
+#         data = createGoBar(languageMap),
+#         layout = go.Layout(title="Bigramy w różnych językach", barmode="stack")
+#     ))
 
-def createTrigramBarGraph(languageMap):
-    return dcc.Graph(
-        id = "trigram-bar-graph",
-        figure=go.Figure(
-            data = createGoBar(languageMap),
-            layout = go.Layout(title="Trigramy w różnych językach", barmode="stack")
-        )
-    )
-def createAnalysisBarGraphMonograms(id):
+# def createTrigramBarGraph(languageMap):
+#     return dcc.Graph(
+#         id = "trigram-bar-graph",
+#         figure=go.Figure(
+#             data = createGoBar(languageMap),
+#             layout = go.Layout(title="Trigramy w różnych językach", barmode="stack")
+#         )
+#     )
+
+def createAnalysisBarGraphNgrams(id):
     return dcc.Graph(
         id = id,
         figure=go.Figure(
@@ -72,6 +73,8 @@ def createAnalysisBarGraphMonograms(id):
             layout = go.Layout(title="Analiza tekstu", barmode="stack")
         )
     )
+
+
 def crateSelectLanguageDropdown(languages, id):
     return dcc.Dropdown(
         id=id,
@@ -98,7 +101,7 @@ def createPieAnalysisGraph(id):
                 go.Pie(labels=[],
                         values=[]
                     )],
-                layout=go.Layout(title='Not selected ngram'))
+                layout=go.Layout(title='Wybierz ngram'))
     )
 
 def createPieBar(resultMap):
@@ -112,13 +115,13 @@ def createPieBar(resultMap):
             layout=go.Layout(title="Ngram: " + " '" + resultMap[0]['nGram']+"'"))
     return figure
 
-def createGoBar(languageMap):
+def createGoBar(languageMap, range = 20):
     bars = []
 
     for language in languageMap:
         title = language['language']
         data = language['data']
-        data = data[:30]
+        data = data[:range]
         x = [item[0] for item in data]
         y = [float(item[1])/language['totalDataCount']*100 for item in data]
         bars.append(go.Bar(x=x, y=y, name=title))
