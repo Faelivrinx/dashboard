@@ -88,17 +88,18 @@ app.layout = html.Div(children=[
                         ),
                         html.Label(htmlFor="input-text",children=["Wklej tekst do analizy"]),
                     ]),
+                    html.Div(className="row",children=[
+                        html.Div(className="col s12", children=[
+
+                        ], id='flag-container-text')
+                    ]),
                     html.Div(className="row mb-3",children=[
-                        html.Div(className="col s12 m4 l2", children=[]),
                         html.Div(className="col s6 m4 l2", children=[
                             ui.crateSelectLanguageDropdown(data.createLanguageKeysSet(languageMap), "analysis-language-dropdown-text")
                         ]),
                         html.Div(className="col s6 m4 l2", children=[
                             ui.createSelectNGramDropdown("analysis-ngram-dropdown-text"),
-                        ]),
-                        html.Div(className="col s6 m3 l6", children=[
-
-                        ], id='flag-container-text')
+                        ])
                     ]),
                     html.Div(id='analyse-text-upload-container', children=[
                         html.Div(className="row",children=[
@@ -137,17 +138,18 @@ app.layout = html.Div(children=[
                             },
                             multiple=False
                         ),
+                        html.Div(className="row",children=[
+                        html.Div(className="col s12", children=[
+
+                        ], id='flag-container-file')
+                        ]),
                         html.Div(className="row mb-3",children=[
-                            html.Div(className="col s12 m3 l2", children=[]),
                             html.Div(className="col s6 m3 l2", children=[
                                 ui.crateSelectLanguageDropdown(data.createLanguageKeysSet(languageMap), "analysis-language-dropdown-file")
                             ]),
                             html.Div(className="col s6 m3 l2", children=[
                                 ui.createSelectNGramDropdown("analysis-ngram-dropdown-file"),
-                            ]),
-                            html.Div(className="col s6 m3 l6", children=[
-
-                            ], id='flag-container-file')
+                            ])
                         ]),
                         html.Div(id='analyse-file-upload-container', children=[
                             html.Div(className="row",children=[

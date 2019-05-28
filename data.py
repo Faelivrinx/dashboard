@@ -3,6 +3,8 @@ import utility as util
 import codecs
 import json
 from math import log
+import chardet
+import unicodedata
 
 # get Ngram Flat Map form raw text file like a book or smth  :) all ngrams raw one after another not Count'ed
 def getNgramFlatMap(ngramType, rawData):
@@ -94,7 +96,8 @@ def loadInitialData():
             languageMap.append(sortData(getTrigramsFromJson(filename, json_data)))
         else:
             ngramType = filename[(filename.find("_")+1):filename.find(".txt")]
-            data = codecs.open(directory + "/" + filename, 'r', encoding="utf8").read()
+            encoding = chardet.detect(open(directory + "/" + filename, "rb").read())
+            data = codecs.open(directory + "/" + filename, 'r', encoding=encoding['encoding']).read()
             result = {
                 "language": filename[:filename.find("_")],
                 "ngramType": ngramType,
