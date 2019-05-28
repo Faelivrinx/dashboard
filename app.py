@@ -122,7 +122,6 @@ app.layout = html.Div(children=[
                             multiple=False
                         ),
                         html.Button(className="btn blue darken-2 waves-effect waves-light mb-4", children=['Analizuj plik'], id='analyse-file-btn'),
-                        ui.createShowPredictionLanguageCard("hu"),
                         html.Div(id='analyse-file-upload-container', children=[
                             html.Div(className="row mb-3",children=[
                                 html.Div(className="col s2", children=[
@@ -190,33 +189,42 @@ def try_to_analyse_text(clicks, language, nGramType, fileContent):
         input_arr.append(sorted_selected)
         input_arr.append(sorted_result)
 
+        #prepare similarity
+        #select bigrams
+        selected_bigrams = data.findLanguageDataByKeyAndNgram(language, 'bigrams', languageMap)
+        flat_map_bigrams = data.getNgramFlatMap('bigrams', decoded_text)
+        bigrams_counter = Counter(flat_map_bigrams).most_common(n=25)
+        bigram_data = [[count[0], count[1]]for count in bigrams_counter]
+        result_bigrams = {
+                "language": "Input",
+                "ngramType": 'bigrams',
+                "data": bigram_data,
+                "totalDataCount": data.sumNgrams(bigram_data)
+        }
+
+        #select trigrams
+        selected_trigrams = data.findLanguageDataByKeyAndNgram(language, 'trigrams', languageMap)
+        flat_map_trigrams = data.getNgramFlatMap('trigrams', decoded_text)
+        trigrams_counter = Counter(flat_map_trigrams).most_common(n=25)
+        trigram_data = [[count[0], count[1]]for count in trigrams_counter]
+        result_trigrams = {
+                "language": "Input",
+                "ngramType": 'trigrams',
+                "data": trigram_data,
+                "totalDataCount": data.sumNgrams(trigram_data)
+        }
+
+        similarity = []
+        similarity.append(result_bigrams)
+        similarity.append(result_trigrams)
+
+        most_probably_language = data.sortBySimilarity(languageMap, similarity)
+
         figure = go.Figure(
                 data = ui.createGoBar(input_arr),
                 layout = go.Layout(title="Analiza tekstu", barmode="stack")
             )
         return figure
-    # Get from text area
-    # elif textContent != None:
-    #     selected = data.findLanguageDataByKeyAndNgram(language, nGramType, languageMap)
-    #     flat_map = data.getNgramFlatMap(nGramType, textContent)
-    #     monogram_counter = Counter(flat_map)
-    #     mono_data = [[count, monogram_counter[count]]for count in monogram_counter]
-    #     result = {
-    #             "language": "Input",
-    #             "ngramType": nGramType,
-    #             "data": mono_data,
-    #             "totalDataCount": data.sumNgrams(mono_data)
-    #     }
-    #     sorted_result = data.sortData(result)
-    #     sorted_selected = data.sortData(selected)
-    #     input_arr.append(sorted_selected)
-    #     input_arr.append(sorted_result)
-    #
-    #     figure = go.Figure(
-    #             data = ui.createGoBar(input_arr),
-    #             layout = go.Layout(title="Analiza tekstu", barmode="stack")
-    #         )
-    #     return figure
     return []
 
 @app.callback(Output('analysis-bar-graph-text', 'figure'),
@@ -241,6 +249,9 @@ def try_to_analyse_text(clicks, language, nGramType, textContent):
         sorted_selected = data.sortData(selected)
         input_arr.append(sorted_selected)
         input_arr.append(sorted_result)
+
+        most_probably_language = data.sortBySimilarity(languageMap, result)
+
 
         figure = go.Figure(
             data = ui.createGoBar(input_arr),
@@ -270,6 +281,7 @@ def on_data_clicked(dataClicked, nGramType):
     for result in results:
         result['value'] = result['value'] / total_count * 100
         final_result.append(result)
+
     figure = ui.createPieBar(final_result)
     return figure
 

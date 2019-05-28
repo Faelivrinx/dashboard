@@ -2,6 +2,7 @@ import os
 import utility as util
 import codecs
 import json
+from math import log
 
 # get Ngram Flat Map form raw text file like a book or smth  :) all ngrams raw one after another not Count'ed
 def getNgramFlatMap(ngramType, rawData):
@@ -131,3 +132,42 @@ def changeToPercentValue(singleLangMap):
     for item in singleLangMap['data']:
         item[1] = float(item[1]) / singleLangMap['totalDataCount'] * 100
         item[1] = str(item[1])
+
+def sortBySimilarity(languageMap, inputMaps):
+    results = []
+    for inputMap in inputMaps:
+        for search in inputMap['data']:
+            percent_search = float(search[1])/float(inputMap['totalDataCount']) * 100
+            for single_lang in languageMap:
+                sum_language = 0
+                for ngram in single_lang['data']:
+                    if ngram[0] == search[0]:
+                        percent_ngram = float(ngram[1])/float(single_lang['totalDataCount'])*100
+                        # print(single_lang['language']+ " similarity " + "ngram " + str(ngram[0]) + " with value" + str(percent_ngram))
+                        sum_language += percent_ngram
+                result = {'language': single_lang['language'],'similarity': sum_language}
+                results.append(result)
+                print(single_lang['language'] + " "+ str(sum_language))
+
+
+    keys = [res['language'] for res in results]
+    set_keys = set(keys)
+
+    final_result = []
+    for key in set_keys:
+        final_result.append({'language': key, 'similarity': 0})
+
+    for single_result in results:
+        for final in final_result:
+            if final['language'] == single_result['language']:
+                final['similarity'] += single_result['similarity']
+    print(final_result)
+    # print(final_result)
+        # for key in counts_english:
+        #     if search == key[0]:
+        #         print("English:" + key[0] + " with freq: " + str(key[1]))
+        #         perc = key[1]/english_length
+        #         sum_english += abs(log(perc))
+
+def getMostSimilarLanguage():
+    print()
