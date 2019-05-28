@@ -166,7 +166,7 @@ app.layout = html.Div(children=[
             ])
         ], id='data-analysis-section', className="hide"),
     ],id="main-content", className="container"),
-    html.A(id="helpBtn",className="btn-floating btn-lagre waves-effect waves-light red", children=[html.I("help_outline",className="material-icons left")])
+    html.A(id="helpBtn",className="btn-floating btn-large waves-effect waves-light red pulse", children=[html.I("help_outline",className="material-icons left")])
 ], id="main-container")
 
 @app.callback(
