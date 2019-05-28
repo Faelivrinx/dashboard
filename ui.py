@@ -17,7 +17,7 @@ def createLanguagesDropdown(languages):
 def createNavbar():
     return html.Nav(children=[
         html.Div(children=[
-            html.A("dash-board", className="brand-logo"),
+            html.A("dash-board", className="brand-logo", id="project-intro"),
             html.Ul(children=[
                 html.Li(children=[html.A(children=[html.I("dashboard",className="material-icons left"),"Prezentacja danych"], className="waves-effect waves-light")], id="data-presentation"),
                 html.Li(children=[html.A(children=[html.I("equalizer",className="material-icons left"), "Analiza danych"], className="waves-effect waves-light")], id="data-analysis")
@@ -27,6 +27,9 @@ def createNavbar():
 
 def createSectionHeader(title):
     return html.H3(title, className="bold blue-text text-darken-2")
+
+def createApostrophTitle(title):
+    return html.H5(title, className="bold blue-text text-darken-2")
 
 def createDataPresentationTabMenu():
     return html.Div(className="col s12", children=[
