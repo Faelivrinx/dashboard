@@ -147,8 +147,6 @@ def sortBySimilarity(languageMap, inputMaps):
                         sum_language += percent_ngram
                 result = {'language': single_lang['language'],'similarity': sum_language}
                 results.append(result)
-                print(single_lang['language'] + " "+ str(sum_language))
-
 
     keys = [res['language'] for res in results]
     set_keys = set(keys)
@@ -161,13 +159,12 @@ def sortBySimilarity(languageMap, inputMaps):
         for final in final_result:
             if final['language'] == single_result['language']:
                 final['similarity'] += single_result['similarity']
-    print(final_result)
-    # print(final_result)
-        # for key in counts_english:
-        #     if search == key[0]:
-        #         print("English:" + key[0] + " with freq: " + str(key[1]))
-        #         perc = key[1]/english_length
-        #         sum_english += abs(log(perc))
+
+    final_result.sort(key = sortSimilarity, reverse = True)
+    return final_result[0]
+
+def sortSimilarity(val):
+    return val['similarity']
 
 def getMostSimilarLanguage():
     print()
