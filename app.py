@@ -10,6 +10,8 @@ import data as data
 import ui as ui
 import base64
 
+# UWAGA niniejszy kod był pisany przez osoby które nigdy nie używały pythona, nie było czasu na refaktoryzację kodu, usuwanie zbędnych już nie używanych funkcji i komentowanie, a co dopiero testy jednostkowe :) pozdrawiamy.
+
 # load app data
 languageMap = data.loadInitialData()
 
@@ -43,45 +45,68 @@ app.layout = html.Div(children=[
         html.Div(children=[
             # Data presentation
             ui.createSectionHeader("Prezentacja danych"),
-            html.Div(className="row", children=[
-                ui.createDataPresentationTabMenu(),
-                html.Div(id="tab-monograms", className="col s12", children=[
-                    # monograms layout
-                    html.Div(className="row",children=[
-                        html.Div(className="col s7", children=[html.Div(className="card-panel", children=["Ilość wczytanych monogramów"])]),
-                        html.Div(className="col s5", children=[html.Div(className="card-panel", children=[
-                            dcc.Input(placeholder="Podaj monogram...", type="number",value='',id="monogram-input")])])
-                    ]),
-                    html.Div(className="row",children=[
-                        html.Div(className="col s7", children=[html.Div(className="card-panel", children=[
-                            ui.createMonogramBarGraph(data.getMonogramData(languageMap))
-                            ])]),
-                        html.Div(className="col s5", children=[html.Div(className="card-panel", children=[])])
-                    ])
+            html.Div(className="row mb-3",children=[
+                html.Div(className="col s6 m4 l2", children=[
+                    ui.crateSelectLanguageDropdown(data.createLanguageKeysSet(languageMap), "presentation-language-dropdown")
                 ]),
-                html.Div(id="tab-digrams", className="col s12", children=[html.Div(
-                    # digrams layout
-                    html.Div(className="row",children=[
-                        html.Div(className="col s12", children=[html.Div(className="card-panel", children=[
-                            ui.createBigramBarGraph(data.getBigramData(languageMap))
-                            ])])
-                    ])
-                )]),
-                html.Div(id="tab-trigrams", className="col s12", children=[html.Div(
-                    # trigrams layout
-                    html.Div(className="row",children=[
-                        html.Div(className="col s12", children=[html.Div(className="card-panel", children=[
-                            ui.createTrigramBarGraph(data.getTrigramData(languageMap))
-                            ])])
-                    ])
-                )])
+                html.Div(className="col s6 m4 l2", children=[
+                    ui.createSelectNGramDropdown("presentation-ngram-dropdown"),
+                ])
+            ]),
+            html.Div(className="row",children=[
+                html.Div(className="col m12 l8", children=[
+                    ui.createAnalysisBarGraphNgrams("presentation-bar-graph"),
+                    dcc.Slider(
+                        id='presentation-items-slider',
+                        min=3,
+                        max=45,
+                        value=15,
+                        step=3
+                    )
+                ]),
+                html.Div(className="col m12 l4", children=[
+                    ui.createPieAnalysisGraph('presentation-pie-graph')
+                ])
             ])
+            # html.Div(className="row", children=[
+            #     ui.createDataPresentationTabMenu(),
+            #     html.Div(id="tab-monograms", className="col s12", children=[
+            #         # monograms layout
+            #         html.Div(className="row",children=[
+            #             html.Div(className="col s7", children=[html.Div(className="card-panel", children=["Ilość wczytanych monogramów"])]),
+            #             html.Div(className="col s5", children=[html.Div(className="card-panel", children=[
+            #                 dcc.Input(placeholder="Podaj monogram...", type="number",value='',id="monogram-input")])])
+            #         ]),
+            #         html.Div(className="row",children=[
+            #             html.Div(className="col s7", children=[html.Div(className="card-panel", children=[
+            #                 ui.createMonogramBarGraph(data.getMonogramData(languageMap))
+            #                 ])]),
+            #             html.Div(className="col s5", children=[html.Div(className="card-panel", children=[])])
+            #         ])
+            #     ]),
+            #     html.Div(id="tab-digrams", className="col s12", children=[html.Div(
+            #         # digrams layout
+            #         html.Div(className="row",children=[
+            #             html.Div(className="col s12", children=[html.Div(className="card-panel", children=[
+            #                 ui.createBigramBarGraph(data.getBigramData(languageMap))
+            #                 ])])
+            #         ])
+            #     )]),
+            #     html.Div(id="tab-trigrams", className="col s12", children=[html.Div(
+            #         # trigrams layout
+            #         html.Div(className="row",children=[
+            #             html.Div(className="col s12", children=[html.Div(className="card-panel", children=[
+            #                 ui.createTrigramBarGraph(data.getTrigramData(languageMap))
+            #                 ])])
+            #         ])
+            #     )])
+            # ])
         ], id='data-presentation-section', className="hide"),
         html.Div(children=[
             # Data analysis
             ui.createSectionHeader("Analiza danych"),
             html.Ul(className="collapsible",children=[
-                html.Li(className="active", children=[
+                html.Li(children=[
                     html.Div(className="collapsible-header", children=[
                         html.I(className="material-icons", children=["short_text"]),
                         "Wczytaj z pola tekstowego"
@@ -95,21 +120,23 @@ app.layout = html.Div(children=[
                         ),
                         html.Label(htmlFor="input-text",children=["Wklej tekst do analizy"]),
                     ]),
-                    html.Button(className="btn blue darken-2 waves-effect waves-light", children=['Analizuj tekst'], id='analyse-text-btn'),
-                    html.Div(id='analyse-text-upload-container', children=[
-                        html.Div(className="row mb-3",children=[
-                            html.Div(className="col s2", children=[
-                                ui.crateSelectLanguageDropdown(data.createLanguageKeysSet(languageMap), "analysis-language-dropdown-text")
-                            ]),
-                            html.Div(className="col s2", children=[
-                                ui.createSelectNGramDropdown("analysis-ngram-dropdown-text"),
-                            ])
+                    html.Div(className="row mb-3",children=[
+                        html.Div(className="col s12 m4 l2", children=[
+                            html.Button(className="btn blue darken-2 waves-effect waves-light", children=['Analizuj tekst'], id='analyse-text-btn'),
                         ]),
+                        html.Div(className="col s6 m4 l2", children=[
+                            ui.crateSelectLanguageDropdown(data.createLanguageKeysSet(languageMap), "analysis-language-dropdown-text")
+                        ]),
+                        html.Div(className="col s6 m4 l2", children=[
+                            ui.createSelectNGramDropdown("analysis-ngram-dropdown-text"),
+                        ])
+                    ]),
+                    html.Div(id='analyse-text-upload-container', children=[
                         html.Div(className="row",children=[
-                            html.Div(className="col s8", children=[
-                                ui.createAnalysisBarGraphMonograms("analysis-bar-graph-text")
+                            html.Div(className="col m12 l8", children=[
+                                ui.createAnalysisBarGraphNgrams("analysis-bar-graph-text")
                             ]),
-                            html.Div(className="col s4", children=[
+                            html.Div(className="col m12 l4", children=[
                                 ui.createPieAnalysisGraph('analysis-pie-graph-text')
                             ])
                         ])
@@ -141,22 +168,23 @@ app.layout = html.Div(children=[
                             },
                             multiple=False
                         ),
-                        html.Button(className="btn blue darken-2 waves-effect waves-light mb-4", children=['Analizuj plik'], id='analyse-file-btn'),
-                        ui.createShowPredictionLanguageCard("hu"),
-                        html.Div(id='analyse-file-upload-container', children=[
-                            html.Div(className="row mb-3",children=[
-                                html.Div(className="col s2", children=[
-                                    ui.crateSelectLanguageDropdown(data.createLanguageKeysSet(languageMap), "analysis-language-dropdown-file")
-                                ]),
-                                html.Div(className="col s2", children=[
-                                    ui.createSelectNGramDropdown("analysis-ngram-dropdown-file"),
-                                ])
+                        html.Div(className="row mb-3",children=[
+                            html.Div(className="col s12 m4 l2", children=[
+                                html.Button(className="btn blue darken-2 waves-effect waves-light", children=['Analizuj plik'], id='analyse-file-btn')
                             ]),
+                            html.Div(className="col s6 m4 l2", children=[
+                                ui.crateSelectLanguageDropdown(data.createLanguageKeysSet(languageMap), "analysis-language-dropdown-file")
+                            ]),
+                            html.Div(className="col s6 m4 l2", children=[
+                                ui.createSelectNGramDropdown("analysis-ngram-dropdown-file"),
+                            ])
+                        ]),
+                        html.Div(id='analyse-file-upload-container', children=[
                             html.Div(className="row",children=[
-                                html.Div(className="col s8", children=[
-                                    ui.createAnalysisBarGraphMonograms("analysis-bar-graph-file")
+                                html.Div(className="col m12 l8", children=[
+                                    ui.createAnalysisBarGraphNgrams("analysis-bar-graph-file")
                                 ]),
-                                html.Div(className="col s4", children=[
+                                html.Div(className="col m12 l4", children=[
                                     ui.createPieAnalysisGraph('analysis-pie-graph-file')
                                 ])
                             ])
@@ -167,6 +195,45 @@ app.layout = html.Div(children=[
         ], id='data-analysis-section', className="hide"),
     ],id="main-content", className="container")
 ], id="main-container")
+
+@app.callback(
+    Output('presentation-bar-graph', 'figure'),
+    [Input('presentation-language-dropdown', 'value'),
+     Input('presentation-ngram-dropdown', 'value'),
+     Input('presentation-items-slider', 'value')])
+def update_graph(language, nGramType, range):
+    input_arr = []
+    selected = data.findLanguageDataByKeyAndNgram(language, nGramType, languageMap)
+    sorted_selected = data.sortData(selected)
+    input_arr.append(sorted_selected)
+    figure = go.Figure(
+                data = ui.createGoBar(input_arr, range),
+                layout = go.Layout(title="Analiza tekstu", barmode="stack")
+            )
+    return figure
+
+@app.callback(Output('presentation-pie-graph', 'figure'),
+        [Input('presentation-bar-graph', 'clickData')],
+        [State('presentation-ngram-dropdown', 'value')])
+def on_data_clicked(dataClicked, nGramType):
+    results = []
+    total_count = 0
+    nGram = dataClicked['points'][0]['x']
+    for lang in languageMap:
+        if lang['ngramType'] == nGramType:
+            for ngrams in lang['data']:
+                if ngrams[0] == nGram:
+                    #get percent
+                    percent_value = float(ngrams[1])/float(lang['totalDataCount'])*100
+                    total_count += percent_value
+                    result = {'language': lang['language'], 'nGram': nGram, 'value': percent_value}
+                    results.append(result)
+    final_result = []
+    for result in results:
+        result['value'] = result['value'] / total_count * 100
+        final_result.append(result)
+    figure = ui.createPieBar(final_result)
+    return figure
 
 
 @app.callback(Output('analyse-file-upload-input', 'children'),
@@ -200,7 +267,7 @@ def try_to_analyse_text(clicks, language, nGramType, fileContent):
         monogram_counter = Counter(flat_map)
         mono_data = [[count, monogram_counter[count]]for count in monogram_counter]
         result = {
-                "language": "Input",
+                "language": "dane",
                 "ngramType": nGramType,
                 "data": mono_data,
                 "totalDataCount": data.sumNgrams(mono_data)
@@ -210,33 +277,42 @@ def try_to_analyse_text(clicks, language, nGramType, fileContent):
         input_arr.append(sorted_selected)
         input_arr.append(sorted_result)
 
+        #prepare similarity
+        #select bigrams
+        # selected_bigrams = data.findLanguageDataByKeyAndNgram(language, 'bigrams', languageMap)
+        # flat_map_bigrams = data.getNgramFlatMap('bigrams', decoded_text)
+        # bigrams_counter = Counter(flat_map_bigrams).most_common(n=25)
+        # bigram_data = [[count[0], count[1]]for count in bigrams_counter]
+        # result_bigrams = {
+        #         "language": "Input",
+        #         "ngramType": 'bigrams',
+        #         "data": bigram_data,
+        #         "totalDataCount": data.sumNgrams(bigram_data)
+        # }
+        #
+        # #select trigrams
+        # selected_trigrams = data.findLanguageDataByKeyAndNgram(language, 'trigrams', languageMap)
+        # flat_map_trigrams = data.getNgramFlatMap('trigrams', decoded_text)
+        # trigrams_counter = Counter(flat_map_trigrams).most_common(n=25)
+        # trigram_data = [[count[0], count[1]]for count in trigrams_counter]
+        # result_trigrams = {
+        #         "language": "Input",
+        #         "ngramType": 'trigrams',
+        #         "data": trigram_data,
+        #         "totalDataCount": data.sumNgrams(trigram_data)
+        # }
+        #
+        # similarity = []
+        # similarity.append(result_bigrams)
+        # similarity.append(result_trigrams)
+
+        # most_probably_language = data.sortBySimilarity(languageMap, similarity)
+
         figure = go.Figure(
                 data = ui.createGoBar(input_arr),
                 layout = go.Layout(title="Analiza tekstu", barmode="stack")
             )
         return figure
-    # Get from text area
-    # elif textContent != None:
-    #     selected = data.findLanguageDataByKeyAndNgram(language, nGramType, languageMap)
-    #     flat_map = data.getNgramFlatMap(nGramType, textContent)
-    #     monogram_counter = Counter(flat_map)
-    #     mono_data = [[count, monogram_counter[count]]for count in monogram_counter]
-    #     result = {
-    #             "language": "Input",
-    #             "ngramType": nGramType,
-    #             "data": mono_data,
-    #             "totalDataCount": data.sumNgrams(mono_data)
-    #     }
-    #     sorted_result = data.sortData(result)
-    #     sorted_selected = data.sortData(selected)
-    #     input_arr.append(sorted_selected)
-    #     input_arr.append(sorted_result)
-    #
-    #     figure = go.Figure(
-    #             data = ui.createGoBar(input_arr),
-    #             layout = go.Layout(title="Analiza tekstu", barmode="stack")
-    #         )
-    #     return figure
     return []
 
 @app.callback(Output('analysis-bar-graph-text', 'figure'),
@@ -252,7 +328,7 @@ def try_to_analyse_text(clicks, language, nGramType, textContent):
         monogram_counter = Counter(flat_map)
         mono_data = [[count, monogram_counter[count]]for count in monogram_counter]
         result = {
-            "language": "Input",
+            "language": "dane",
             "ngramType": nGramType,
             "data": mono_data,
             "totalDataCount": data.sumNgrams(mono_data)
@@ -261,6 +337,9 @@ def try_to_analyse_text(clicks, language, nGramType, textContent):
         sorted_selected = data.sortData(selected)
         input_arr.append(sorted_selected)
         input_arr.append(sorted_result)
+
+        # most_probably_language = data.sortBySimilarity(languageMap, result)
+
 
         figure = go.Figure(
             data = ui.createGoBar(input_arr),
@@ -290,6 +369,7 @@ def on_data_clicked(dataClicked, nGramType):
     for result in results:
         result['value'] = result['value'] / total_count * 100
         final_result.append(result)
+
     figure = ui.createPieBar(final_result)
     return figure
 

@@ -20,10 +20,10 @@ const app = (() => {
             M.AutoInit();
 
             const collapsibleInstance = M.Collapsible.init(element.collapsible, {onOpenStart: ()=>{window.dispatchEvent(new Event('resize'));}});
-            const tabsInstance = M.Tabs.init(element.tabs, {swipeable: false, onShow: ()=>{window.dispatchEvent(new Event('resize'));}});
+            // const tabsInstance = M.Tabs.init(element.tabs, {swipeable: false, onShow: ()=>{window.dispatchEvent(new Event('resize'));}});
             
-            tabsInstance.select('tab-monograms');
-            tabsInstance.updateTabIndicator();
+            // tabsInstance.select('tab-monograms');
+            // tabsInstance.updateTabIndicator();
 
             const createDataIntroAttribute = (hintText, element) => {
                 element.setAttribute("data-intro", hintText)
