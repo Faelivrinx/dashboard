@@ -25,6 +25,20 @@ def createNavbar():
             ],className="right hide-on-med-and-down", id="nav-menu")
         ], className="container")
     ], className="nav-wrapper blue darken-3")
+# <div class="footer-copyright">
+#             <div class="container">
+#             © 2014 Copyright Text
+#             <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
+#             </div>
+#           </div>
+def createFooter():
+    return html.Div(className="page-footer blue darken-3", children=[
+                html.Div(className="footer-copyright", children=[
+                    html.Div(className="container", children=[
+                        "© 2019 Copyright by -boardPy Team (Adam Bigaj, Dominik Jurasz && Konrad Baczyński)"
+                    ])
+                ])
+            ])
 
 def createSectionHeader(title):
     return html.H3(title, className="bold blue-text text-darken-2")
@@ -111,7 +125,7 @@ def createGoBar(languageMap, range = 20):
 
 def createShowPredictionLanguageCard(languageName):
     imgPath = "./assets/img/flags/"+languageName+".png"
-    return html.H5(className="blue darken-3 p-2 bold white-text valign-wrapper center-align", children=[
+    return html.H5(className="card blue darken-3 p-2 bold white-text valign-wrapper center-align", children=[
                 ("Wyniki analizy, wprowadzony tekst sugeruje język: "), 
                 html.Img(className="ml-3", src=imgPath, height="42px")
             ])
