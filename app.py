@@ -20,6 +20,7 @@ app = dash.Dash()
 
 # Main layout
 app.layout = html.Div(children=[
+    dcc.Interval(id='globalInterval', interval=2 * 1000, n_intervals=0),
     ui.createNavbar(),
     html.Section(children=[
         html.Div(children=[
@@ -68,39 +69,6 @@ app.layout = html.Div(children=[
                     ui.createPieAnalysisGraph('presentation-pie-graph')
                 ])
             ])
-            # html.Div(className="row", children=[
-            #     ui.createDataPresentationTabMenu(),
-            #     html.Div(id="tab-monograms", className="col s12", children=[
-            #         # monograms layout
-            #         html.Div(className="row",children=[
-            #             html.Div(className="col s7", children=[html.Div(className="card-panel", children=["Ilość wczytanych monogramów"])]),
-            #             html.Div(className="col s5", children=[html.Div(className="card-panel", children=[
-            #                 dcc.Input(placeholder="Podaj monogram...", type="number",value='',id="monogram-input")])])
-            #         ]),
-            #         html.Div(className="row",children=[
-            #             html.Div(className="col s7", children=[html.Div(className="card-panel", children=[
-            #                 ui.createMonogramBarGraph(data.getMonogramData(languageMap))
-            #                 ])]),
-            #             html.Div(className="col s5", children=[html.Div(className="card-panel", children=[])])
-            #         ])
-            #     ]),
-            #     html.Div(id="tab-digrams", className="col s12", children=[html.Div(
-            #         # digrams layout
-            #         html.Div(className="row",children=[
-            #             html.Div(className="col s12", children=[html.Div(className="card-panel", children=[
-            #                 ui.createBigramBarGraph(data.getBigramData(languageMap))
-            #                 ])])
-            #         ])
-            #     )]),
-            #     html.Div(id="tab-trigrams", className="col s12", children=[html.Div(
-            #         # trigrams layout
-            #         html.Div(className="row",children=[
-            #             html.Div(className="col s12", children=[html.Div(className="card-panel", children=[
-            #                 ui.createTrigramBarGraph(data.getTrigramData(languageMap))
-            #                 ])])
-            #         ])
-            #     )])
-            # ])
         ], id='data-presentation-section', className="hide"),
         html.Div(children=[
             # Data analysis
@@ -120,10 +88,12 @@ app.layout = html.Div(children=[
                         ),
                         html.Label(htmlFor="input-text",children=["Wklej tekst do analizy"]),
                     ]),
+                    html.Div(className="row",children=[
+                        html.Div(className="col s12", children=[
+
+                        ], id='flag-container-text')
+                    ]),
                     html.Div(className="row mb-3",children=[
-                        html.Div(className="col s12 m4 l2", children=[
-                            html.Button(className="btn blue darken-2 waves-effect waves-light", children=['Analizuj tekst'], id='analyse-text-btn'),
-                        ]),
                         html.Div(className="col s6 m4 l2", children=[
                             ui.crateSelectLanguageDropdown(data.createLanguageKeysSet(languageMap), "analysis-language-dropdown-text")
                         ]),
@@ -149,35 +119,35 @@ app.layout = html.Div(children=[
                         "Wczytaj z pliku"
                     ]),
                     html.Div(className="collapsible-body grey lighten-5", children=[
-                        html.Div(id="analyse-file-upload-input-container",children=[
-                            dcc.Upload(
-                                className="mb-4",
-                                id='analyse-file-upload-input',
-                                children=html.Div([
-                                    'Przeciągnij plik lub ',
-                                    html.A('wybierz')
-                                ]),
-                                style={
-                                    'width': '100%',
-                                    'height': '60px',
-                                    'lineHeight': '60px',
-                                    'borderWidth': '1px',
-                                    'borderStyle': 'dashed',
-                                    'borderRadius': '5px',
-                                    'textAlign': 'center',
-                                    'margin': '10px'
-                                },
-                                multiple=False
-                            )   
+                        dcc.Upload(
+                            className="mb-4",
+                            id='analyse-file-upload-input',
+                            children=html.Div([
+                                'Przeciągnij plik lub ',
+                                html.A('wybierz')
+                            ]),
+                            style={
+                                'width': '100%',
+                                'height': '60px',
+                                'lineHeight': '60px',
+                                'borderWidth': '1px',
+                                'borderStyle': 'dashed',
+                                'borderRadius': '5px',
+                                'textAlign': 'center',
+                                'margin': '10px'
+                            },
+                            multiple=False
+                        ),
+                        html.Div(className="row",children=[
+                        html.Div(className="col s12", children=[
+
+                        ], id='flag-container-file')
                         ]),
                         html.Div(className="row mb-3",children=[
-                            html.Div(className="col s12 m4 l2", children=[
-                                html.Button(className="btn blue darken-2 waves-effect waves-light", children=['Analizuj plik'], id='analyse-file-btn')
-                            ]),
-                            html.Div(className="col s6 m4 l2", children=[
+                            html.Div(className="col s6 m3 l2", children=[
                                 ui.crateSelectLanguageDropdown(data.createLanguageKeysSet(languageMap), "analysis-language-dropdown-file")
                             ]),
-                            html.Div(className="col s6 m4 l2", children=[
+                            html.Div(className="col s6 m3 l2", children=[
                                 ui.createSelectNGramDropdown("analysis-ngram-dropdown-file"),
                             ])
                         ]),
@@ -252,12 +222,77 @@ def update_upload(filename):
     ])
 
 
+@app.callback(Output('flag-container-file', 'children'),
+            [Input('analyse-file-upload-input', 'contents')])
+def update_flag_file(fileContent):
+    similarity = []
+    if fileContent != None:
+        bytes = base64.b64decode(fileContent)
+        decoded_text = bytes.decode("utf-8", 'ignore')
+        #bigrams
+        flat_map_bigrams = data.getNgramFlatMap('bigrams', decoded_text)
+        bigrams_counter = Counter(flat_map_bigrams).most_common(n=25)
+        bigram_data = [[count[0], count[1]]for count in bigrams_counter]
+        result_bigrams = {
+                "language": "Input",
+                "ngramType": 'bigrams',
+                "data": bigram_data,
+                "totalDataCount": data.sumNgrams(bigram_data)
+        }
+        #trigrams
+        flat_map_trigrams = data.getNgramFlatMap('trigrams', decoded_text)
+        trigrams_counter = Counter(flat_map_trigrams).most_common(n=25)
+        trigram_data = [[count[0], count[1]]for count in trigrams_counter]
+        result_trigrams = {
+                "language": "Input",
+                "ngramType": 'trigrams',
+                "data": trigram_data,
+                "totalDataCount": data.sumNgrams(trigram_data)
+        }
+        similarity.append(result_bigrams)
+        similarity.append(result_trigrams)
+        most_probably_language = data.sortBySimilarity(languageMap, similarity)
+        return ui.createShowPredictionLanguageCard(most_probably_language['language'])
+
+@app.callback(Output('flag-container-text', 'children'),
+            [Input('globalInterval', 'n_intervals')],
+            [State('analyse-text-input', 'value')])
+def update_flag_file(n, textContent):
+    similarity = []
+    if textContent != None:
+        if len(textContent) > 10:
+            flat_map_bigrams = data.getNgramFlatMap('bigrams', textContent)
+            bigrams_counter = Counter(flat_map_bigrams).most_common(n=25)
+            bigram_data = [[count[0], count[1]]for count in bigrams_counter]
+            result_bigrams = {
+                    "language": "Input",
+                    "ngramType": 'bigrams',
+                    "data": bigram_data,
+                    "totalDataCount": data.sumNgrams(bigram_data)
+            }
+            #trigrams
+            flat_map_trigrams = data.getNgramFlatMap('trigrams', textContent)
+            trigrams_counter = Counter(flat_map_trigrams).most_common(n=25)
+            trigram_data = [[count[0], count[1]]for count in trigrams_counter]
+            result_trigrams = {
+                    "language": "Input",
+                    "ngramType": 'trigrams',
+                    "data": trigram_data,
+                    "totalDataCount": data.sumNgrams(trigram_data)
+            }
+            similarity.append(result_bigrams)
+            similarity.append(result_trigrams)
+            most_probably_language = data.sortBySimilarity(languageMap, similarity)
+            return ui.createShowPredictionLanguageCard(most_probably_language['language'])
+        else:
+            return ""
+
+
 @app.callback(Output('analysis-bar-graph-file', 'figure'),
-            [Input('analyse-file-btn', 'n_clicks')],
-            [State('analysis-language-dropdown-file', 'value'),
-             State('analysis-ngram-dropdown-file', 'value'),
-             State('analyse-file-upload-input', 'contents')])
-def try_to_analyse_text(clicks, language, nGramType, fileContent):
+            [Input('analyse-file-upload-input', 'contents'),
+             Input('analysis-language-dropdown-file', 'value'),
+             Input('analysis-ngram-dropdown-file', 'value')],[])
+def try_to_analyse_text(fileContent, language, nGramType):
     #If empty and empty: do nothing
     input_arr = []
     # default get from file
@@ -280,37 +315,6 @@ def try_to_analyse_text(clicks, language, nGramType, fileContent):
         input_arr.append(sorted_selected)
         input_arr.append(sorted_result)
 
-        #prepare similarity
-        #select bigrams
-        # selected_bigrams = data.findLanguageDataByKeyAndNgram(language, 'bigrams', languageMap)
-        # flat_map_bigrams = data.getNgramFlatMap('bigrams', decoded_text)
-        # bigrams_counter = Counter(flat_map_bigrams).most_common(n=25)
-        # bigram_data = [[count[0], count[1]]for count in bigrams_counter]
-        # result_bigrams = {
-        #         "language": "Input",
-        #         "ngramType": 'bigrams',
-        #         "data": bigram_data,
-        #         "totalDataCount": data.sumNgrams(bigram_data)
-        # }
-        #
-        # #select trigrams
-        # selected_trigrams = data.findLanguageDataByKeyAndNgram(language, 'trigrams', languageMap)
-        # flat_map_trigrams = data.getNgramFlatMap('trigrams', decoded_text)
-        # trigrams_counter = Counter(flat_map_trigrams).most_common(n=25)
-        # trigram_data = [[count[0], count[1]]for count in trigrams_counter]
-        # result_trigrams = {
-        #         "language": "Input",
-        #         "ngramType": 'trigrams',
-        #         "data": trigram_data,
-        #         "totalDataCount": data.sumNgrams(trigram_data)
-        # }
-        #
-        # similarity = []
-        # similarity.append(result_bigrams)
-        # similarity.append(result_trigrams)
-
-        # most_probably_language = data.sortBySimilarity(languageMap, similarity)
-
         figure = go.Figure(
                 data = ui.createGoBar(input_arr),
                 layout = go.Layout(title="Analiza tekstu", barmode="stack")
@@ -319,11 +323,11 @@ def try_to_analyse_text(clicks, language, nGramType, fileContent):
     return []
 
 @app.callback(Output('analysis-bar-graph-text', 'figure'),
-            [Input('analyse-text-btn', 'n_clicks')],
-            [State('analysis-language-dropdown-text', 'value'),
-             State('analysis-ngram-dropdown-text', 'value'),
-             State('analyse-text-input', 'value')])
-def try_to_analyse_text(clicks, language, nGramType, textContent):
+            [Input('analyse-text-input', 'value'),
+             Input('analysis-language-dropdown-text', 'value'),
+             Input('analysis-ngram-dropdown-text', 'value')],
+            [])
+def try_to_analyse_text(textContent, language, nGramType):
     input_arr = []
     if textContent != None:
         selected = data.findLanguageDataByKeyAndNgram(language, nGramType, languageMap)
@@ -341,7 +345,6 @@ def try_to_analyse_text(clicks, language, nGramType, textContent):
         input_arr.append(sorted_selected)
         input_arr.append(sorted_result)
 
-        # most_probably_language = data.sortBySimilarity(languageMap, result)
 
 
         figure = go.Figure(

@@ -46,28 +46,6 @@ def createDataPresentationTabMenu():
                 ])
             ])
 
-# def createMonogramBarGraph(languageMap):
-#     return dcc.Graph(id = "monogram-bar-graph", figure=go.Figure(
-#         data = createGoBar(languageMap),
-#         layout = go.Layout(title="Monogramy w różnych językach", barmode="stack"),
-
-#     ))
-
-# def createBigramBarGraph(languageMap):
-#     return dcc.Graph(id = "bigram-bar-graph", figure=go.Figure(
-#         data = createGoBar(languageMap),
-#         layout = go.Layout(title="Bigramy w różnych językach", barmode="stack")
-#     ))
-
-# def createTrigramBarGraph(languageMap):
-#     return dcc.Graph(
-#         id = "trigram-bar-graph",
-#         figure=go.Figure(
-#             data = createGoBar(languageMap),
-#             layout = go.Layout(title="Trigramy w różnych językach", barmode="stack")
-#         )
-#     )
-
 def createAnalysisBarGraphNgrams(id):
     return dcc.Graph(
         id = id,

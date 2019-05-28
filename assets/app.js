@@ -46,6 +46,7 @@ const app = (() => {
             const collapsibleInstance = M.Collapsible.init(element.collapsible, {onOpenStart: e=>{
                 currentPage = "analysis-" + e.getAttribute("title")
                 window.dispatchEvent(new Event('resize'));}});
+                
             // const tabsInstance = M.Tabs.init(element.tabs, {swipeable: false, onShow: ()=>{window.dispatchEvent(new Event('resize'));}});
             
             // tabsInstance.select('tab-monograms');
