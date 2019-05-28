@@ -17,3 +17,9 @@ body {
     top: auto;
     right: auto; */
 }
+
+#helpBtn {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+}

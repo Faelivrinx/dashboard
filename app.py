@@ -105,8 +105,8 @@ app.layout = html.Div(children=[
         html.Div(children=[
             # Data analysis
             ui.createSectionHeader("Analiza danych"),
-            html.Ul(className="collapsible",children=[
-                html.Li(children=[
+            html.Ul(className="collapsible", id="analysis-collapsible", children=[
+                html.Li(title="text", children=[
                     html.Div(className="collapsible-header", children=[
                         html.I(className="material-icons", children=["short_text"]),
                         "Wczytaj z pola tekstowego"
@@ -143,31 +143,33 @@ app.layout = html.Div(children=[
                     ])
                     ]),
                 ]),
-                html.Li(children=[
+                html.Li(title="file", children=[
                     html.Div(className="collapsible-header", children=[
                         html.I(className="material-icons", children=["insert_drive_file"]),
                         "Wczytaj z pliku"
                     ]),
                     html.Div(className="collapsible-body grey lighten-5", children=[
-                        dcc.Upload(
-                            className="mb-4",
-                            id='analyse-file-upload-input',
-                            children=html.Div([
-                                'Przeciągnij plik lub ',
-                                html.A('wybierz')
-                            ]),
-                            style={
-                                'width': '100%',
-                                'height': '60px',
-                                'lineHeight': '60px',
-                                'borderWidth': '1px',
-                                'borderStyle': 'dashed',
-                                'borderRadius': '5px',
-                                'textAlign': 'center',
-                                'margin': '10px'
-                            },
-                            multiple=False
-                        ),
+                        html.Div(id="analyse-file-upload-input-container",children=[
+                            dcc.Upload(
+                                className="mb-4",
+                                id='analyse-file-upload-input',
+                                children=html.Div([
+                                    'Przeciągnij plik lub ',
+                                    html.A('wybierz')
+                                ]),
+                                style={
+                                    'width': '100%',
+                                    'height': '60px',
+                                    'lineHeight': '60px',
+                                    'borderWidth': '1px',
+                                    'borderStyle': 'dashed',
+                                    'borderRadius': '5px',
+                                    'textAlign': 'center',
+                                    'margin': '10px'
+                                },
+                                multiple=False
+                            )   
+                        ]),
                         html.Div(className="row mb-3",children=[
                             html.Div(className="col s12 m4 l2", children=[
                                 html.Button(className="btn blue darken-2 waves-effect waves-light", children=['Analizuj plik'], id='analyse-file-btn')
@@ -194,7 +196,7 @@ app.layout = html.Div(children=[
             ])
         ], id='data-analysis-section', className="hide"),
     ],id="main-content", className="container"),
-    html.A(id="helpBtn",className="btn-floating btn-lagre waves-effect waves-light red", children=[html.I("help",className="material-icons left")])
+    html.A(id="helpBtn",className="btn-floating btn-lagre waves-effect waves-light red", children=[html.I("help_outline",className="material-icons left")])
 ], id="main-container")
 
 @app.callback(
