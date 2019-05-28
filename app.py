@@ -47,8 +47,8 @@ app.layout = html.Div(children=[
                 html.Div(className="col s12", children=[
                     html.Div(className="card-panel dataIntro1", children=[
                         ui.createApostrophTitle("Autorzy"),
-                        html.P("Baczyński Konrad "
-                        + "Bigaj Adam "
+                        html.P("Baczyński Konrad\n "
+                        + "Bigaj Adam\n "
                         + "Jurasz Dominik", className="")
                     ])]),
             ])
@@ -83,8 +83,8 @@ app.layout = html.Div(children=[
         html.Div(children=[
             # Data analysis
             ui.createSectionHeader("Analiza danych"),
-            html.Ul(className="collapsible",children=[
-                html.Li(children=[
+            html.Ul(className="collapsible", id="analysis-collapsible", children=[
+                html.Li(title="text", children=[
                     html.Div(className="collapsible-header", children=[
                         html.I(className="material-icons", children=["short_text"]),
                         "Wczytaj z pola tekstowego"
@@ -123,7 +123,7 @@ app.layout = html.Div(children=[
                     ])
                     ]),
                 ]),
-                html.Li(children=[
+                html.Li(title="file", children=[
                     html.Div(className="collapsible-header", children=[
                         html.I(className="material-icons", children=["insert_drive_file"]),
                         "Wczytaj z pliku"
@@ -175,7 +175,8 @@ app.layout = html.Div(children=[
                 ])
             ])
         ], id='data-analysis-section', className="hide"),
-    ],id="main-content", className="container")
+    ],id="main-content", className="container"),
+    html.A(id="helpBtn",className="btn-floating btn-large waves-effect waves-light red pulse", children=[html.I("help_outline",className="material-icons left")])
 ], id="main-container")
 
 @app.callback(

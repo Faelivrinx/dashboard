@@ -32,3 +32,9 @@ body {
     margin: 13px;
     cursor: pointer;
 }
+
+#helpBtn {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+}
